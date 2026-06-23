@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f5f5;
+      padding: 8px;
+    }
+
+    .dashboard {
+      display: grid;
+      height: calc(100vh - 16px);
+      gap: 8px;
+      /* three columns: left, middle (wider), right */
+      grid-template-columns: 1fr 1.05fr 1fr;
+      /* rows: top area, bottom area, then two thin bars */
+      grid-template-rows: 1fr 1.6fr 40px 40px;
+      grid-template-areas:
+        "s1 s2 s6"
+        "s3 s2 s7"
+        "s4 s4 s4"
+        "s5 s5 s5";
+    }
+
+    .panel {
+      background: #ffffff;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      color: #888;
+      font-size: 14px;
+    }
+
+    .s1 { grid-area: s1; padding: 16px; overflow: hidden; }
+    .logo-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transform: scale(1.7);
+    }
+
+    .logo {
+      text-align: center;
+      line-height: 1.1;
+      user-select: none;
+    }
+    .logo .top {
+      color: #2b5aa8;
+      font-weight: 700;
+      font-size: clamp(20px, 4.5vw, 52px);
+      letter-spacing: 0.18em;
+    }
+    .logo .bottom {
+      color: #7d7d7d;
+      font-weight: 400;
+      font-size: clamp(12px, 2.6vw, 30px);
+      letter-spacing: 0.35em;
+      margin-top: 4px;
+      padding-left: 0.35em; /* offset to balance the trailing letter-spacing */
+    }
+    .s2 {
+      grid-area: s2;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+      background: #ffffff;
+    }
+    .slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;        /* show whole flyer page, no cropping of text */
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .slide.active { opacity: 1; }
+    .slide-empty {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #9aa6b2;
+      text-align: center;
+      padding: 24px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .slide-empty code {
+      background: #1c1c1c;
+      color: #cfd8e0;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .s3 {
+      grid-area: s3;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      padding: 0;
+      overflow: hidden;
+    }
+    .tsy-header {
+      flex: 0 0 auto;
+      padding: 10px 14px;
+      font-weight: 700;
+      font-size: clamp(12px, 1.3vw, 15px);
+      color: #14202b;
+      border-bottom: 1px solid #ececec;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .tsy-src {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #6b7785;
+      background: #eef2f7;
+      padding: 2px 7px;
+      border-radius: 3px;
+    }
+    .tsy-widget {
+      flex: 1 1 auto;
+      min-height: 0;
+      position: relative;
+    }
+    .s4 {
+      grid-area: s4;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: stretch;
+      background: #111;
+      border-color: #111;
+      color: #fff;
+    }
+    .ticker-label {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      background: #c8102e;
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      font-size: 14px;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+    .ticker-viewport {
+      flex: 1 1 auto;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .ticker-track {
+      display: inline-flex;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      will-change: transform;
+      animation: ticker-scroll 60s linear infinite;
+    }
+    .ticker-viewport:hover .ticker-track {
+      animation-play-state: paused;
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 28px;
+      font-size: 14px;
+      color: #f0f0f0;
+    }
+    .ticker-item::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #c8102e;
+      margin-right: 14px;
+      flex: 0 0 auto;
+    }
+    @keyframes ticker-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .s5 {
+      grid-area: s5;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: stretch;
+      background: #0b1d2c;
+      border-color: #0b1d2c;
+      color: #fff;
+    }
+    .stock-label {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      background: #1a5c3a;
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      font-size: 14px;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+    .stock-viewport {
+      flex: 1 1 auto;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .stock-track {
+      display: inline-flex;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      will-change: transform;
+      animation: ticker-scroll 70s linear infinite;
+    }
+    .stock-viewport:hover .stock-track {
+      animation-play-state: paused;
+    }
+    .stock-item {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      padding: 0 22px;
+      font-size: 14px;
+      border-right: 1px solid rgba(255,255,255,0.12);
+    }
+    .stock-sym { font-weight: 700; color: #e8eef3; letter-spacing: 0.04em; }
+    .stock-price { color: #cfd8e0; }
+    .stock-chg { font-weight: 600; }
+    .stock-chg.up   { color: #2ec26a; }
+    .stock-chg.down { color: #ff5a5a; }
+    .stock-chg.flat { color: #c0c0c0; }
+    .s6 {
+      grid-area: s6;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: stretch;
+      padding: 18px 22px;
+      color: #1a2733;
+      background: linear-gradient(160deg, #eaf2fb 0%, #ffffff 60%);
+      text-align: left;
+    }
+    .wx-greeting {
+      font-size: clamp(13px, 1.4vw, 17px);
+      font-weight: 600;
+      color: #2b5aa8;
+    }
+    .wx-flavor {
+      font-size: clamp(11px, 1.1vw, 13px);
+      color: #6b7785;
+      margin-top: 2px;
+      font-style: italic;
+    }
+    .wx-clock {
+      font-size: clamp(34px, 6vw, 64px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: 0.01em;
+      color: #14202b;
+      font-variant-numeric: tabular-nums;
+    }
+    .wx-clock .ampm {
+      font-size: 0.4em;
+      font-weight: 700;
+      color: #7d8995;
+      margin-left: 6px;
+    }
+    .wx-date {
+      font-size: clamp(13px, 1.5vw, 18px);
+      font-weight: 600;
+      color: #3a4754;
+      margin-top: 2px;
+    }
+    .wx-mid {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .wx-weather {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .wx-icon { font-size: clamp(34px, 5vw, 52px); line-height: 1; }
+    .wx-temp {
+      font-size: clamp(26px, 4vw, 44px);
+      font-weight: 800;
+      color: #14202b;
+      line-height: 1;
+    }
+    .wx-cond { font-size: clamp(12px, 1.3vw, 15px); font-weight: 600; color: #3a4754; }
+    .wx-sub  { font-size: clamp(10px, 1.1vw, 12px); color: #6b7785; margin-top: 2px; }
+    .wx-loc {
+      font-size: clamp(10px, 1.1vw, 12px);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #9aa6b2;
+    }
+    .wx-quip {
+      font-size: clamp(11px, 1.2vw, 14px);
+      font-weight: 600;
+      color: #2b5aa8;
+    }
+    .wx-forecast {
+      display: flex;
+      gap: 8px;
+    }
+    .wx-fc-day {
+      flex: 1 1 0;
+      background: rgba(43, 90, 168, 0.07);
+      border-radius: 8px;
+      padding: 6px 4px;
+      text-align: center;
+      line-height: 1.25;
+    }
+    .wx-fc-name {
+      font-size: clamp(10px, 1.1vw, 12px);
+      font-weight: 700;
+      color: #3a4754;
+    }
+    .wx-fc-icon { font-size: clamp(18px, 2.2vw, 24px); }
+    .wx-fc-temp {
+      font-size: clamp(10px, 1.1vw, 12px);
+      font-weight: 700;
+      color: #14202b;
+      font-variant-numeric: tabular-nums;
+    }
+    .wx-fc-temp .lo { color: #8a96a2; font-weight: 500; }
+    .s7 {
+      grid-area: s7;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      padding: 0;
+      overflow: hidden;
+      background: #ffffff;
+      color: #1a2733;
+    }
+    .cal-header {
+      flex: 0 0 auto;
+      padding: 12px 14px 6px 58px;
+    }
+    .cal-weekday {
+      font-size: clamp(11px, 1.2vw, 13px);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #2b5aa8;
+    }
+    .cal-date {
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 400;
+      line-height: 1.05;
+      color: #14202b;
+    }
+    .cal-tz {
+      flex: 0 0 auto;
+      font-size: 11px;
+      color: #8a96a2;
+      padding: 0 0 4px 8px;
+    }
+    .cal-grid {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .cal-hour {
+      flex: 1 1 0;
+      display: flex;
+      min-height: 0;
+      border-top: 1px solid #ececec;
+    }
+    .cal-time {
+      flex: 0 0 50px;
+      font-size: 11px;
+      color: #8a96a2;
+      padding: 2px 8px 0 0;
+      text-align: right;
+      white-space: nowrap;
+    }
+    .cal-cell {
+      flex: 1 1 auto;
+      position: relative;
+      border-left: 1px solid #ececec;
+    }
+    .cal-event {
+      position: absolute;
+      inset: 3px 10px 3px 6px;
+      background: #2b5aa8;
+      border-left: 3px solid #7fa8e0;
+      border-radius: 6px;
+      padding: 4px 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(43, 90, 168, 0.25);
+    }
+    .cal-event-title {
+      font-size: clamp(11px, 1.2vw, 14px);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+    .cal-event-time {
+      font-size: clamp(10px, 1vw, 12px);
+      color: #cfe0f5;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <div class="panel s1">
+      <img class="logo-img" src="images/download.gif" alt="SafeTrust Mortgage">
+    </div>
+    <div class="panel s2" id="slideshow">
+      <div class="slide-empty" id="slideEmpty">
+        <div>🖼️ Loading flyer pages…</div>
+      </div>
+    </div>
+    <div class="panel s3">
+      <div class="tsy-header">
+        <span>U.S. 10-Year Treasury</span>
+        <span class="tsy-src">US10Y</span>
+      </div>
+      <div class="tsy-widget">
+        <!-- TradingView chart embedded by URL — symbol locked to TVC:US10Y -->
+        <iframe
+          title="U.S. 10-Year Treasury Yield"
+          src="https://s.tradingview.com/widgetembed/?symbol=FRED%3ADGS10&interval=D&theme=light&style=3&hidesidetoolbar=1&hidetoptoolbar=0&symboledit=0&saveimage=0&timezone=America%2FNew_York&hideideas=1&locale=en"
+          style="width:100%;height:100%;border:0;display:block;"
+          frameborder="0" scrolling="no" allowtransparency="true">
+        </iframe>
+      </div>
+    </div>
+    <div class="panel s4">
+      <div class="ticker-label">News</div>
+      <div class="ticker-viewport">
+        <div class="ticker-track" id="tickerTrack"></div>
+      </div>
+    </div>
+    <div class="panel s5">
+      <div class="stock-label">Markets</div>
+      <div class="stock-viewport">
+        <div class="stock-track" id="stockTrack"></div>
+      </div>
+    </div>
+    <div class="panel s6">
+      <div>
+        <div class="wx-loc">Troy, Michigan</div>
+        <div class="wx-greeting" id="wxGreeting">Hello, Troy</div>
+        <div class="wx-flavor" id="wxFlavor">Pulling up the local scene…</div>
+      </div>
+
+      <div class="wx-mid">
+        <div>
+          <div class="wx-clock" id="wxClock">--:--<span class="ampm" id="wxAmPm"></span></div>
+          <div class="wx-date" id="wxDate">—</div>
+        </div>
+
+        <div class="wx-weather">
+          <div class="wx-icon" id="wxIcon">🌡️</div>
+          <div>
+            <div class="wx-temp" id="wxTemp">—°</div>
+            <div class="wx-cond" id="wxCond">Loading weather…</div>
+            <div class="wx-sub" id="wxSub"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wx-forecast" id="wxForecast"></div>
+
+      <div class="wx-quip" id="wxQuip">&nbsp;</div>
+    </div>
+    <div class="panel s7">
+      <div class="cal-header">
+        <div class="cal-weekday" id="calWeekday">—</div>
+        <div class="cal-date" id="calDate">—</div>
+      </div>
+      <div class="cal-tz" id="calTz">GMT-04</div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+  </div>
+
+  <script>
+    // ----- Auto-reload (keeps a long-running TV kiosk fresh) -----
+    // Reloads the whole page every 60 minutes to clear any memory drift.
+    setTimeout(function () { location.reload(); }, 60 * 60 * 1000);
+
+    // ----- Image slideshow (section 2) -----
+    // Cycles flyer pages from the "Safetrust Company Member Book Flyer" folder,
+    // named 1.png .. 38.png, in numeric order, looping back to 1.
+    const SLIDE_BASE = "Safetrust Company Member Book Flyer/";
+    const SLIDE_MAX = 38;                 // highest number to look for (1..38)
+    const SLIDE_EXTS = ["png", "jpg", "jpeg", "webp", "gif"];
+    const SLIDE_INTERVAL = 5000;          // ms each image stays on screen
+
+    // Try to load <base><n>.<ext>, resolving to the first extension that loads.
+    function probeImage(n) {
+      return new Promise(resolve => {
+        let i = 0;
+        const tryNext = () => {
+          if (i >= SLIDE_EXTS.length) { resolve(null); return; }
+          const src = encodeURI(SLIDE_BASE + n + "." + SLIDE_EXTS[i++]);
+          const img = new Image();
+          img.onload = () => resolve(src);
+          img.onerror = tryNext;
+          img.src = src;
+        };
+        tryNext();
+      });
+    }
+
+    async function initSlideshow() {
+      const container = document.getElementById('slideshow');
+      const empty = document.getElementById('slideEmpty');
+
+      // Probe 1..SLIDE_MAX in parallel, keep the ones that exist, in order.
+      const found = (await Promise.all(
+        Array.from({ length: SLIDE_MAX }, (_, k) => probeImage(k + 1))
+      )).filter(Boolean);
+
+      if (!found.length) return; // leave the "no images" message visible
+
+      empty.remove();
+
+      const slides = found.map((src, idx) => {
+        const img = document.createElement('img');
+        img.className = 'slide' + (idx === 0 ? ' active' : '');
+        img.src = src;
+        img.alt = '';
+        container.appendChild(img);
+        return img;
+      });
+
+      if (slides.length === 1) return; // single image: just show it, no cycling
+
+      let current = 0;
+      setInterval(() => {
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+      }, SLIDE_INTERVAL);
+    }
+
+    initSlideshow();
+
+    // ----- News ticker -----
+    // Real headlines pulled June 23, 2026 (used as the offline fallback).
+    const FALLBACK_HEADLINES = [
+      "30-year fixed mortgage rate rises to 6.63% as of June 23, 2026",
+      "Fed's hawkish tone pushes mortgage rates upward after June meeting",
+      "May CPI shows inflation at 4.2% annually — highest pace in over three years",
+      "Fannie Mae and MBA predict rates stay in the low-to-mid 6% range through 2027",
+      "Mortgage applications down 3.8% week-over-week for week ending June 12",
+      "30-year jumbo loan rate eases to 6.48%",
+      "Fixed loans ease while ARMs hold firm in latest rate update",
+      "Markets react to high consumer prices and resilient labor data"
+    ];
+
+    // RSS feeds to try (housing / mortgage / finance), converted to JSON via rss2json.
+    const FEEDS = [
+      "https://www.housingwire.com/feed/",
+      "https://www.cnbc.com/id/10000115/device/rss/rss.html", // CNBC Real Estate
+      "https://www.cnbc.com/id/15839135/device/rss/rss.html"  // CNBC Finance
+    ];
+
+    function renderTicker(headlines) {
+      const track = document.getElementById('tickerTrack');
+      // Duplicate the list so the -50% scroll loops seamlessly.
+      const html = headlines.map(h =>
+        '<span class="ticker-item">' + escapeHtml(h) + '</span>'
+      ).join('');
+      track.innerHTML = html + html;
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+
+    async function fetchLiveHeadlines() {
+      for (const feed of FEEDS) {
+        try {
+          const url = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(feed);
+          const res = await fetch(url);
+          if (!res.ok) continue;
+          const data = await res.json();
+          if (data.status === 'ok' && data.items && data.items.length) {
+            return data.items.slice(0, 15).map(i => i.title.trim());
+          }
+        } catch (e) {
+          // network/CORS error — try the next feed
+        }
+      }
+      return null;
+    }
+
+    async function initTicker() {
+      renderTicker(FALLBACK_HEADLINES); // show something immediately
+      const live = await fetchLiveHeadlines();
+      if (live && live.length) renderTicker(live);
+    }
+
+    initTicker();
+    // Refresh live headlines every 10 minutes.
+    setInterval(async () => {
+      const live = await fetchLiveHeadlines();
+      if (live && live.length) renderTicker(live);
+    }, 10 * 60 * 1000);
+
+    // ----- Stock ticker -----
+    // Symbols relevant to a mortgage dashboard: indices, 10Y yield, mortgage
+    // lenders, homebuilders, big banks. label = display name.
+    const SYMBOLS = [
+      { sym: "^GSPC", label: "S&P 500" },
+      { sym: "^DJI",  label: "DOW" },
+      { sym: "^IXIC", label: "NASDAQ" },
+      { sym: "^TNX",  label: "10Y YIELD" },
+      { sym: "RKT",   label: "RKT" },
+      { sym: "UWMC",  label: "UWMC" },
+      { sym: "PFSI",  label: "PFSI" },
+      { sym: "COOP",  label: "COOP" },
+      { sym: "DHI",   label: "DHI" },
+      { sym: "LEN",   label: "LEN" },
+      { sym: "ZG",    label: "ZG" },
+      { sym: "JPM",   label: "JPM" },
+      { sym: "WFC",   label: "WFC" }
+    ];
+
+    // Approximate real values (June 23, 2026) used as the offline fallback.
+    const FALLBACK_QUOTES = [
+      { label: "S&P 500",   price: 6180.42, chgPct: -0.97 },
+      { label: "DOW",       price: 43210.5, chgPct:  0.25 },
+      { label: "NASDAQ",    price: 19875.3, chgPct: -1.50 },
+      { label: "10Y YIELD", price: 4.62,    chgPct:  1.10 },
+      { label: "RKT",       price: 13.85,   chgPct: -1.20 },
+      { label: "UWMC",      price: 5.42,    chgPct: -0.80 },
+      { label: "PFSI",      price: 112.30,  chgPct:  0.45 },
+      { label: "COOP",      price: 98.70,   chgPct:  0.60 },
+      { label: "DHI",       price: 142.10,  chgPct: -1.05 },
+      { label: "LEN",       price: 118.45,  chgPct: -0.90 },
+      { label: "ZG",        price: 71.20,   chgPct: -1.60 },
+      { label: "JPM",       price: 268.40,  chgPct:  0.30 },
+      { label: "WFC",       price: 78.95,   chgPct: -0.15 }
+    ];
+
+    function fmtPrice(p) {
+      if (p >= 1000) return p.toLocaleString(undefined, { maximumFractionDigits: 2 });
+      return p.toFixed(2);
+    }
+
+    function renderStocks(quotes) {
+      const track = document.getElementById('stockTrack');
+      const html = quotes.map(q => {
+        const dir = q.chgPct > 0.001 ? 'up' : (q.chgPct < -0.001 ? 'down' : 'flat');
+        const arrow = dir === 'up' ? '▲' : (dir === 'down' ? '▼' : '▬');
+        const sign = q.chgPct > 0 ? '+' : '';
+        return '<span class="stock-item">' +
+                 '<span class="stock-sym">' + escapeHtml(q.label) + '</span>' +
+                 '<span class="stock-price">' + fmtPrice(q.price) + '</span>' +
+                 '<span class="stock-chg ' + dir + '">' + arrow + ' ' + sign + q.chgPct.toFixed(2) + '%</span>' +
+               '</span>';
+      }).join('');
+      track.innerHTML = html + html; // duplicate for seamless loop
+    }
+
+    async function fetchOneQuote(item) {
+      const yahoo = "https://query1.finance.yahoo.com/v8/finance/chart/" +
+                    encodeURIComponent(item.sym) + "?interval=1d&range=1d";
+      const proxied = "https://api.allorigins.win/raw?url=" + encodeURIComponent(yahoo);
+      const res = await fetch(proxied);
+      if (!res.ok) throw new Error("bad status");
+      const data = await res.json();
+      const meta = data.chart.result[0].meta;
+      const price = meta.regularMarketPrice;
+      const prev = meta.chartPreviousClose ?? meta.previousClose;
+      const chgPct = prev ? ((price - prev) / prev) * 100 : 0;
+      return { label: item.label, price, chgPct };
+    }
+
+    async function fetchLiveQuotes() {
+      const results = await Promise.allSettled(SYMBOLS.map(fetchOneQuote));
+      const ok = results
+        .filter(r => r.status === 'fulfilled' && isFinite(r.value.price))
+        .map(r => r.value);
+      // Only treat as success if we got most of them.
+      return ok.length >= Math.ceil(SYMBOLS.length / 2) ? ok : null;
+    }
+
+    async function initStocks() {
+      renderStocks(FALLBACK_QUOTES); // immediate
+      const live = await fetchLiveQuotes();
+      if (live) renderStocks(live);
+    }
+
+    initStocks();
+    // Refresh quotes every 60 seconds.
+    setInterval(async () => {
+      const live = await fetchLiveQuotes();
+      if (live) renderStocks(live);
+    }, 60 * 1000);
+
+    // ----- Date / Time / Weather for Troy, MI (with flavor) -----
+    const TROY = { lat: 42.6056, lon: -83.1499, tz: "America/Detroit" };
+
+    // Map WMO weather codes -> { icon, text }
+    function describeWeather(code, isDay) {
+      const sun = isDay ? "☀️" : "🌙";
+      const map = {
+        0:  [sun, "Clear skies"],
+        1:  [isDay ? "🌤️" : "🌙", "Mostly clear"],
+        2:  ["⛅", "Partly cloudy"],
+        3:  ["☁️", "Overcast"],
+        45: ["🌫️", "Foggy"],
+        48: ["🌫️", "Freezing fog"],
+        51: ["🌦️", "Light drizzle"],
+        53: ["🌦️", "Drizzle"],
+        55: ["🌧️", "Heavy drizzle"],
+        56: ["🌧️", "Freezing drizzle"],
+        57: ["🌧️", "Freezing drizzle"],
+        61: ["🌦️", "Light rain"],
+        63: ["🌧️", "Rain"],
+        65: ["🌧️", "Heavy rain"],
+        66: ["🌧️", "Freezing rain"],
+        67: ["🌧️", "Freezing rain"],
+        71: ["🌨️", "Light snow"],
+        73: ["🌨️", "Snow"],
+        75: ["❄️", "Heavy snow"],
+        77: ["🌨️", "Snow grains"],
+        80: ["🌦️", "Rain showers"],
+        81: ["🌧️", "Rain showers"],
+        82: ["⛈️", "Violent showers"],
+        85: ["🌨️", "Snow showers"],
+        86: ["❄️", "Heavy snow showers"],
+        95: ["⛈️", "Thunderstorm"],
+        96: ["⛈️", "Storm w/ hail"],
+        99: ["⛈️", "Storm w/ hail"]
+      };
+      return map[code] || ["🌡️", "Michigan weather"];
+    }
+
+    // Time-of-day greeting with local flavor.
+    function greetingFor(hour) {
+      if (hour < 5)  return "Burning the midnight oil, Troy";
+      if (hour < 12) return "Good morning, Troy";
+      if (hour < 17) return "Good afternoon, Troy";
+      if (hour < 21) return "Good evening, Troy";
+      return "Late night in the Big Beaver";
+    }
+
+    // Little rotating flavor lines (Michigan / Troy / mortgage office vibe).
+    const FLAVOR_LINES = [
+      "Somewhere off Big Beaver Road…",
+      "Closer to the lakes than you think.",
+      "Coney's still open. Probably.",
+      "Go Lions — this is the year. (We mean it.)",
+      "Pure Michigan, one rate lock at a time.",
+      "Rates change. Coffee helps.",
+      "The Somerset crowd is out and about."
+    ];
+
+    // Weather-driven quip — Michigan does NOT do subtle seasons.
+    function quipFor(code, tempF, isDay) {
+      if ([71,73,75,77,85,86].includes(code))
+        return "❄️ Snow day energy — bundle up, Michigan winters don't negotiate.";
+      if ([95,96,99,82].includes(code))
+        return "⛈️ Thunder rolling in — good day to lock a rate indoors.";
+      if ([61,63,65,80,81,51,53,55].includes(code))
+        return "☔ Grab an umbrella — soft Michigan rain incoming.";
+      if ([45,48].includes(code))
+        return "🌫️ Foggy out — drive safe on Rochester Road.";
+      if (tempF != null && tempF >= 88)
+        return "🥵 Scorcher for Michigan — find some AC and a lemonade.";
+      if (tempF != null && tempF <= 20)
+        return "🧊 Frigid — the kind of cold that earns you bragging rights.";
+      if (code === 0 && isDay)
+        return "😎 Gorgeous day — soak up that rare Michigan sunshine.";
+      if (!isDay)
+        return "🌙 Quiet night over Oakland County.";
+      return "👍 Solid day in southeast Michigan.";
+    }
+
+    // Short weekday name from an "YYYY-MM-DD" string (built at local noon to avoid TZ drift).
+    function shortDayName(iso) {
+      const p = iso.split('-').map(Number);
+      const dt = new Date(p[0], p[1] - 1, p[2], 12);
+      return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dt.getDay()];
+    }
+
+    function getTroyParts() {
+      // Build a Date in Troy's timezone using Intl.
+      const now = new Date();
+      const fmt = new Intl.DateTimeFormat("en-US", {
+        timeZone: TROY.tz, hour: "numeric", minute: "2-digit",
+        hour12: true, weekday: "long", month: "long", day: "numeric", year: "numeric"
+      });
+      const parts = {};
+      for (const p of fmt.formatToParts(now)) parts[p.type] = p.value;
+      const hour24 = parseInt(new Intl.DateTimeFormat("en-US", {
+        timeZone: TROY.tz, hour: "numeric", hour12: false
+      }).format(now), 10) % 24;
+      return { parts, hour24 };
+    }
+
+    let flavorIdx = 0;
+    function tickClock() {
+      const { parts, hour24 } = getTroyParts();
+      document.getElementById('wxClock').innerHTML =
+        parts.hour + ":" + parts.minute +
+        '<span class="ampm">' + (parts.dayPeriod || '') + '</span>';
+      document.getElementById('wxDate').textContent =
+        parts.weekday + ", " + parts.month + " " + parts.day + ", " + parts.year;
+      document.getElementById('wxGreeting').textContent = greetingFor(hour24);
+    }
+
+    function rotateFlavor() {
+      document.getElementById('wxFlavor').textContent =
+        FLAVOR_LINES[flavorIdx % FLAVOR_LINES.length];
+      flavorIdx++;
+    }
+
+    async function fetchWeather() {
+      try {
+        const url = "https://api.open-meteo.com/v1/forecast?latitude=" + TROY.lat +
+          "&longitude=" + TROY.lon +
+          "&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,is_day,weather_code" +
+          "&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=4" +
+          "&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=" + encodeURIComponent(TROY.tz);
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("weather fetch failed");
+        const data = await res.json();
+        const c = data.current;
+        const isDay = c.is_day === 1;
+        const [icon, text] = describeWeather(c.weather_code, isDay);
+        document.getElementById('wxIcon').textContent = icon;
+        document.getElementById('wxTemp').textContent = Math.round(c.temperature_2m) + "°";
+        document.getElementById('wxCond').textContent = text;
+        document.getElementById('wxSub').textContent =
+          "Feels like " + Math.round(c.apparent_temperature) + "° · " +
+          c.relative_humidity_2m + "% humidity · " +
+          Math.round(c.wind_speed_10m) + " mph wind";
+        document.getElementById('wxQuip').textContent =
+          quipFor(c.weather_code, c.temperature_2m, isDay);
+
+        // Next 3 days (indices 1..3; index 0 is today)
+        if (data.daily && data.daily.time) {
+          const d = data.daily;
+          let fc = '';
+          for (let i = 1; i <= 3 && i < d.time.length; i++) {
+            const [ic] = describeWeather(d.weather_code[i], true);
+            fc += '<div class="wx-fc-day">' +
+              '<div class="wx-fc-name">' + shortDayName(d.time[i]) + '</div>' +
+              '<div class="wx-fc-icon">' + ic + '</div>' +
+              '<div class="wx-fc-temp">' + Math.round(d.temperature_2m_max[i]) + '°' +
+                ' <span class="lo">' + Math.round(d.temperature_2m_min[i]) + '°</span></div>' +
+              '</div>';
+          }
+          document.getElementById('wxForecast').innerHTML = fc;
+        }
+      } catch (e) {
+        document.getElementById('wxCond').textContent = "Weather unavailable right now";
+        document.getElementById('wxSub').textContent = "Couldn't reach the weather service.";
+        document.getElementById('wxQuip').textContent = "🌡️ Trust us, it's Michigan out there.";
+      }
+    }
+
+    // ----- Day calendar (section 7) -----
+    // Single recurring event: Weekly Meeting, Wednesdays 9–10 AM.
+    const CAL_START_HOUR = 8;   // 8 AM
+    const CAL_END_HOUR = 18;    // 6 PM
+
+    function hourLabel(h) {
+      const ampm = h < 12 ? "AM" : "PM";
+      let hh = h % 12; if (hh === 0) hh = 12;
+      return hh + " " + ampm;
+    }
+
+    // Timezone offset label for Troy (e.g. "GMT-04" in summer, "GMT-05" in winter).
+    function troyOffsetLabel() {
+      try {
+        const parts = new Intl.DateTimeFormat("en-US", {
+          timeZone: TROY.tz, timeZoneName: "longOffset"
+        }).formatToParts(new Date());
+        const v = (parts.find(p => p.type === "timeZoneName") || {}).value || "GMT-04:00";
+        return v.replace(":00", "");
+      } catch (e) {
+        return "GMT-04";
+      }
+    }
+
+    function renderCalendar() {
+      const now = new Date();
+      const wdShort = new Intl.DateTimeFormat("en-US", { timeZone: TROY.tz, weekday: "short" }).format(now);
+      const dayNum  = new Intl.DateTimeFormat("en-US", { timeZone: TROY.tz, day: "numeric" }).format(now);
+
+      document.getElementById('calWeekday').textContent = wdShort.toUpperCase();
+      document.getElementById('calDate').textContent = dayNum;
+      document.getElementById('calTz').textContent = troyOffsetLabel();
+
+      const isWednesday = wdShort === "Wed";
+
+      let rows = "";
+      for (let h = CAL_START_HOUR; h <= CAL_END_HOUR; h++) {
+        let inner = "";
+        if (isWednesday && h === 9) {
+          inner = '<div class="cal-event">' +
+                    '<div class="cal-event-title">Weekly Meeting</div>' +
+                    '<div class="cal-event-time">9 – 10 AM</div>' +
+                  '</div>';
+        }
+        rows += '<div class="cal-hour">' +
+                  '<div class="cal-time">' + hourLabel(h) + '</div>' +
+                  '<div class="cal-cell">' + inner + '</div>' +
+                '</div>';
+      }
+      document.getElementById('calGrid').innerHTML = rows;
+    }
+
+    renderCalendar();
+    setInterval(renderCalendar, 60 * 1000);   // re-check each minute so the day rolls over automatically
+
+    tickClock();
+    setInterval(tickClock, 1000);        // clock ticks every second
+    rotateFlavor();
+    setInterval(rotateFlavor, 8000);     // flavor line rotates every 8s
+    fetchWeather();
+    setInterval(fetchWeather, 10 * 60 * 1000); // weather refresh every 10 min
+  </script>
+</body>
+</html>
