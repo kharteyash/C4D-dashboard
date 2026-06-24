@@ -51,12 +51,60 @@
       font-size: 14px;
     }
 
-    .s1 { grid-area: s1; padding: 16px; overflow: hidden; }
+    .s1 {
+      grid-area: s1;
+      padding: 16px;
+      overflow: hidden;
+      flex-direction: column;
+    }
+    .s1-logo {
+      flex: 1 1 auto;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
     .logo-img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
       transform: scale(1.5);
+    }
+    .s1-footer {
+      flex: 0 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding-top: 6px;
+    }
+    .s1-divider {
+      width: 72px;
+      height: 3px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #07224b, #547ab2);
+      margin-bottom: 4px;
+    }
+    .s1-tagline {
+      font-size: clamp(11px, 1.4vw, 16px);
+      font-style: italic;
+      color: #6b7785;
+    }
+    .s1-web {
+      font-size: clamp(13px, 1.7vw, 21px);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #2b5aa8;
+      text-decoration: none;
+    }
+    .s1-nmls {
+      font-size: clamp(11px, 1.3vw, 15px);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #8a96a2;
     }
 
     .logo {
@@ -583,7 +631,15 @@
 <body>
   <div class="dashboard">
     <div class="panel s1">
-      <img class="logo-img" src="images/download.gif" alt="SafeTrust Mortgage">
+      <div class="s1-logo">
+        <img class="logo-img" src="images/download.gif" alt="SafeTrust Mortgage">
+      </div>
+      <div class="s1-footer">
+        <div class="s1-divider"></div>
+        <div class="s1-tagline">Your trusted path home 🏡</div>
+        <a class="s1-web" href="https://safetrustmtg.com/" target="_blank" rel="noopener">🌐 safetrustmtg.com</a>
+        <div class="s1-nmls">NMLS #2178036</div>
+      </div>
     </div>
     <div class="panel s2" id="slideshow">
       <div class="slide-empty" id="slideEmpty">
