@@ -911,12 +911,9 @@
     // Get a FREE key at https://finnhub.io/register and paste it below.
     const FINNHUB_KEY = "d8tul51r01qinhuel2ngd8tul51r01qinhuel2o0";
 
-    // Finnhub's free tier covers US stocks/ETFs (not raw indices), so the major
-    // indices use their tracking ETFs: SPY=S&P 500, DIA=Dow, QQQ=Nasdaq-100.
+    // Stocks via Finnhub (free tier). Major indices come from the Netlify
+    // /indices function (real index levels from Yahoo, not ETF proxies).
     const SYMBOLS = [
-      { sym: "SPY",  label: "S&P 500" },
-      { sym: "DIA",  label: "DOW" },
-      { sym: "QQQ",  label: "NASDAQ" },
       { sym: "RKT",  label: "RKT" },
       { sym: "UWMC", label: "UWMC" },
       { sym: "PFSI", label: "PFSI" },
@@ -939,9 +936,9 @@
 
     // Shown briefly on load and only if the live fetch fails. Approximate.
     const FALLBACK_QUOTES = [
-      { label: "S&P 500",   price: 615.00,  chgPct: -0.97 },
-      { label: "DOW",       price: 432.00,  chgPct:  0.25 },
-      { label: "NASDAQ",    price: 545.00,  chgPct: -1.50 },
+      { label: "S&P 500",   price: 7346.86, chgPct: -0.25 },
+      { label: "DOW",       price: 51890.7, chgPct:  0.43 },
+      { label: "NASDAQ",    price: 25406.5, chgPct: -0.71 },
       { label: "RKT",       price: 14.84,   chgPct:  1.27 },
       { label: "UWMC",      price: 5.42,    chgPct: -0.80 },
       { label: "PFSI",      price: 112.30,  chgPct:  0.45 },
@@ -1004,6 +1001,14 @@
       return { label: m.label, price: d.price, chgPct };
     }
 
+    async function fetchIndices() {
+      // Real S&P 500 / Dow / Nasdaq levels from our Netlify function.
+      const res = await fetch('/.netlify/functions/indices', { cache: 'no-store' });
+      if (!res.ok) throw new Error('indices bad status');
+      const d = await res.json();
+      return (d.quotes || []).filter(q => isFinite(q.price));
+    }
+
     async function fetchBitcoin() {
       // Bitcoin spot + 24h change from CoinGecko (keyless, CORS-enabled).
       const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true");
@@ -1018,10 +1023,14 @@
       const stockJobs = (FINNHUB_KEY && FINNHUB_KEY !== "YOUR_FINNHUB_API_KEY")
         ? SYMBOLS.map(fetchOneQuote) : [];
       const metalJobs = METALS.map(fetchOneMetal);
-      const results = await Promise.allSettled([...stockJobs, ...metalJobs, fetchBitcoin()]);
-      const ok = results
+      const [indices, results] = await Promise.all([
+        fetchIndices().catch(() => []),                 // indices first; empty if it fails
+        Promise.allSettled([...stockJobs, ...metalJobs, fetchBitcoin()])
+      ]);
+      const rest = results
         .filter(r => r.status === 'fulfilled' && isFinite(r.value.price))
         .map(r => r.value);
+      const ok = [...indices, ...rest];
       // Show whatever we got, as long as it's a reasonable set.
       return ok.length >= METALS.length ? ok : null;
     }
