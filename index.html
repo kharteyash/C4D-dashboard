@@ -754,20 +754,33 @@
       { sym: "WFC",  label: "WFC" }
     ];
 
+    // Precious metals — real spot price (per oz) from gold-api.com (keyless, CORS),
+    // with the daily % change proxied by the matching ETF via Finnhub.
+    const METALS = [
+      { label: "GOLD",      spot: "XAU", etf: "GLD"  },
+      { label: "SILVER",    spot: "XAG", etf: "SLV"  },
+      { label: "PLATINUM",  spot: "XPT", etf: "PPLT" },
+      { label: "PALLADIUM", spot: "XPD", etf: "PALL" }
+    ];
+
     // Shown briefly on load and only if the live fetch fails. Approximate.
     const FALLBACK_QUOTES = [
-      { label: "S&P 500", price: 615.00, chgPct: -0.97 },
-      { label: "DOW",     price: 432.00, chgPct:  0.25 },
-      { label: "NASDAQ",  price: 545.00, chgPct: -1.50 },
-      { label: "RKT",     price: 14.84,  chgPct:  1.27 },
-      { label: "UWMC",    price: 5.42,   chgPct: -0.80 },
-      { label: "PFSI",    price: 112.30, chgPct:  0.45 },
-      { label: "COOP",    price: 98.70,  chgPct:  0.60 },
-      { label: "DHI",     price: 142.10, chgPct: -1.05 },
-      { label: "LEN",     price: 118.45, chgPct: -0.90 },
-      { label: "ZG",      price: 71.20,  chgPct: -1.60 },
-      { label: "JPM",     price: 268.40, chgPct:  0.30 },
-      { label: "WFC",     price: 78.95,  chgPct: -0.15 }
+      { label: "S&P 500",   price: 615.00,  chgPct: -0.97 },
+      { label: "DOW",       price: 432.00,  chgPct:  0.25 },
+      { label: "NASDAQ",    price: 545.00,  chgPct: -1.50 },
+      { label: "RKT",       price: 14.84,   chgPct:  1.27 },
+      { label: "UWMC",      price: 5.42,    chgPct: -0.80 },
+      { label: "PFSI",      price: 112.30,  chgPct:  0.45 },
+      { label: "COOP",      price: 98.70,   chgPct:  0.60 },
+      { label: "DHI",       price: 142.10,  chgPct: -1.05 },
+      { label: "LEN",       price: 118.45,  chgPct: -0.90 },
+      { label: "ZG",        price: 71.20,   chgPct: -1.60 },
+      { label: "JPM",       price: 268.40,  chgPct:  0.30 },
+      { label: "WFC",       price: 78.95,   chgPct: -0.15 },
+      { label: "GOLD",      price: 4000.90, chgPct: -2.74 },
+      { label: "SILVER",    price: 58.89,   chgPct: -4.61 },
+      { label: "PLATINUM",  price: 1589.00, chgPct: -4.55 },
+      { label: "PALLADIUM", price: 1193.00, chgPct: -4.79 }
     ];
 
     function fmtPrice(p) {
@@ -801,14 +814,31 @@
       return { label: item.label, price: d.c, chgPct: (typeof d.dp === "number" ? d.dp : 0) };
     }
 
+    async function fetchOneMetal(m) {
+      // Spot price (per oz) from gold-api.com — keyless and CORS-enabled.
+      const res = await fetch("https://api.gold-api.com/price/" + m.spot);
+      if (!res.ok) throw new Error("metal bad status");
+      const d = await res.json();
+      if (typeof d.price !== "number") throw new Error("no price");
+      // Daily % change proxied by the metal's ETF (close tracker); 0 if unavailable.
+      let chgPct = 0;
+      if (FINNHUB_KEY && FINNHUB_KEY !== "YOUR_FINNHUB_API_KEY") {
+        try { chgPct = (await fetchOneQuote({ sym: m.etf, label: m.label })).chgPct; }
+        catch (_) { /* keep 0 */ }
+      }
+      return { label: m.label, price: d.price, chgPct };
+    }
+
     async function fetchLiveQuotes() {
-      if (!FINNHUB_KEY || FINNHUB_KEY === "YOUR_FINNHUB_API_KEY") return null; // no key yet
-      const results = await Promise.allSettled(SYMBOLS.map(fetchOneQuote));
+      const stockJobs = (FINNHUB_KEY && FINNHUB_KEY !== "YOUR_FINNHUB_API_KEY")
+        ? SYMBOLS.map(fetchOneQuote) : [];
+      const metalJobs = METALS.map(fetchOneMetal);
+      const results = await Promise.allSettled([...stockJobs, ...metalJobs]);
       const ok = results
         .filter(r => r.status === 'fulfilled' && isFinite(r.value.price))
         .map(r => r.value);
-      // Only treat as success if we got most of them.
-      return ok.length >= Math.ceil(SYMBOLS.length / 2) ? ok : null;
+      // Show whatever we got, as long as it's a reasonable set.
+      return ok.length >= METALS.length ? ok : null;
     }
 
     async function initStocks() {
