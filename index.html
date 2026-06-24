@@ -370,11 +370,18 @@
       gap: 14px;
     }
     .wx-icon { font-size: clamp(92px, 13.5vw, 140px); line-height: 1; }
+    .wx-temp-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
     .wx-temp {
-      font-size: clamp(70px, 10.8vw, 119px);
+      font-size: clamp(92px, 16.2vw, 173px);
       font-weight: 800;
       color: #14202b;
       line-height: 1;
+      letter-spacing: 0.01em;
+      font-variant-numeric: tabular-nums;
     }
     .wx-cond { font-size: clamp(32px, 3.51vw, 41px); font-weight: 600; color: #3a4754; }
     .wx-sub  { font-size: clamp(27px, 2.97vw, 32px); color: #6b7785; margin-top: 2px; }
@@ -552,9 +559,11 @@
         </div>
 
         <div class="wx-weather">
-          <div class="wx-icon" id="wxIcon">🌡️</div>
           <div>
-            <div class="wx-temp" id="wxTemp">—°</div>
+            <div class="wx-temp-row">
+              <div class="wx-temp" id="wxTemp">—°</div>
+              <div class="wx-icon" id="wxIcon">🌡️</div>
+            </div>
             <div class="wx-cond" id="wxCond">Loading weather…</div>
             <div class="wx-sub" id="wxSub"></div>
           </div>
