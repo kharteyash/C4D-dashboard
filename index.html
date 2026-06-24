@@ -139,16 +139,49 @@
     .tsy-top {
       flex: 0 0 40%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 4px;
       padding: 8px 14px;
+      text-align: center;
+    }
+    .tsy-title {
+      font-size: clamp(13px, 1.6vw, 20px);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #2b5aa8;
+      position: relative;
+      padding-bottom: 6px;
+    }
+    .tsy-title::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 42px;
+      height: 3px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #2b5aa8, #7fa8e0);
     }
     .tsy-number {
       font-size: clamp(44px, 7.5vw, 96px);
       font-weight: 800;
-      color: #14202b;
       line-height: 1;
+      letter-spacing: 0.01em;
       font-variant-numeric: tabular-nums;
+      background: linear-gradient(180deg, #2b5aa8 0%, #14202b 95%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 1px 1px rgba(43, 90, 168, 0.08);
+    }
+    .tsy-updated {
+      font-size: clamp(10px, 1.1vw, 13px);
+      color: #8a96a2;
+      font-style: italic;
     }
     .tsy-bottom {
       flex: 1 1 60%;
@@ -473,7 +506,9 @@
     </div>
     <div class="panel s3">
       <div class="tsy-top">
+        <div class="tsy-title">The 10-Year Treasury</div>
         <div class="tsy-number" id="tsyNumber">—</div>
+        <div class="tsy-updated" id="tsyUpdated">Awaiting update…</div>
       </div>
       <div class="tsy-bottom">
       <div class="tsy-header">
@@ -546,14 +581,29 @@
     setTimeout(function () { location.reload(); }, 60 * 60 * 1000);
 
     // ----- 10-Year Treasury number (section 3 top) — CNBC via Netlify function -----
+    const TSY_TZ = "America/Detroit";
+    function treasuryUpdatedStamp() {
+      const now = new Date();
+      const d = new Intl.DateTimeFormat("en-US", {
+        timeZone: TSY_TZ, month: "short", day: "numeric", year: "numeric"
+      }).format(now);
+      const t = new Intl.DateTimeFormat("en-US", {
+        timeZone: TSY_TZ, hour: "numeric", minute: "2-digit", hour12: true
+      }).format(now);
+      return "Last updated " + d + " · " + t;
+    }
+
     async function fetchTreasuryNumber() {
       try {
         const res = await fetch('/.netlify/functions/treasury', { cache: 'no-store' });
         if (!res.ok) throw new Error('bad status');
         const d = await res.json();
-        if (d && d.last) document.getElementById('tsyNumber').textContent = d.last;
+        if (d && d.last) {
+          document.getElementById('tsyNumber').textContent = d.last;
+          document.getElementById('tsyUpdated').textContent = treasuryUpdatedStamp();
+        }
       } catch (e) {
-        // Leave the previous value (or the "—" placeholder) if the fetch fails.
+        // Leave the previous value (or the placeholder) if the fetch fails.
       }
     }
     fetchTreasuryNumber();
