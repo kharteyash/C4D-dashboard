@@ -136,6 +136,26 @@
       align-items: center;
       justify-content: space-between;
     }
+    .tsy-top {
+      flex: 0 0 40%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+    }
+    .tsy-number {
+      font-size: clamp(44px, 7.5vw, 96px);
+      font-weight: 800;
+      color: #14202b;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .tsy-bottom {
+      flex: 1 1 60%;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
     .tsy-src {
       font-size: 10px;
       font-weight: 800;
@@ -452,6 +472,10 @@
       </div>
     </div>
     <div class="panel s3">
+      <div class="tsy-top">
+        <div class="tsy-number" id="tsyNumber">—</div>
+      </div>
+      <div class="tsy-bottom">
       <div class="tsy-header">
         <span>U.S. 10-Year Treasury</span>
         <span class="tsy-src">US10Y</span>
@@ -464,6 +488,7 @@
           style="width:100%;height:100%;border:0;display:block;"
           frameborder="0" scrolling="no" allowtransparency="true">
         </iframe>
+      </div>
       </div>
     </div>
     <div class="panel s4">
@@ -519,6 +544,20 @@
     // ----- Auto-reload (keeps a long-running TV kiosk fresh) -----
     // Reloads the whole page every 60 minutes to clear any memory drift.
     setTimeout(function () { location.reload(); }, 60 * 60 * 1000);
+
+    // ----- 10-Year Treasury number (section 3 top) — CNBC via Netlify function -----
+    async function fetchTreasuryNumber() {
+      try {
+        const res = await fetch('/.netlify/functions/treasury', { cache: 'no-store' });
+        if (!res.ok) throw new Error('bad status');
+        const d = await res.json();
+        if (d && d.last) document.getElementById('tsyNumber').textContent = d.last;
+      } catch (e) {
+        // Leave the previous value (or the "—" placeholder) if the fetch fails.
+      }
+    }
+    fetchTreasuryNumber();
+    setInterval(fetchTreasuryNumber, 60 * 1000);
 
     // ----- Image slideshow (section 2) -----
     // Cycles flyer pages from the "Safetrust Company Member Book Flyer" folder,
