@@ -1333,7 +1333,7 @@
       const today = parseInt(new Intl.DateTimeFormat("en-US", { timeZone: CAL_TZ, day: "numeric" }).format(now), 10);
 
       document.getElementById('calMTitle').textContent =
-        "SafeTrust Events - " +
+        "Safetrust Events - " +
         new Date(year, month, 1).toLocaleDateString("en-US", { month: "long", year: "numeric" });
 
       const holidays = holidaysForMonth(year, month);
