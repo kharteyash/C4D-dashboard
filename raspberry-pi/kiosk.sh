@@ -26,6 +26,11 @@ while true; do
     --autoplay-policy=no-user-gesture-required \
     --ozone-platform-hint=auto \
     --password-store=basic \
+    --ignore-gpu-blocklist \
+    --enable-gpu-rasterization \
+    --enable-zero-copy \
+    --disable-gpu-driver-bug-workarounds \
+    --enable-features=CanvasOopRasterization \
     "$DASHBOARD"
 
   # If Chromium exits for any reason, wait a moment and relaunch.

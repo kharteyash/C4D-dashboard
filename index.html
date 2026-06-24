@@ -289,6 +289,8 @@
       flex-wrap: nowrap;
       white-space: nowrap;
       will-change: transform;
+      transform: translateZ(0);
+      backface-visibility: hidden;
       animation: ticker-scroll 200s linear infinite;
     }
     .ticker-viewport:hover .ticker-track {
@@ -311,8 +313,8 @@
       flex: 0 0 auto;
     }
     @keyframes ticker-scroll {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
+      from { transform: translate3d(0, 0, 0); }
+      to   { transform: translate3d(-50%, 0, 0); }
     }
     .s5 {
       grid-area: s5;
@@ -349,6 +351,8 @@
       flex-wrap: nowrap;
       white-space: nowrap;
       will-change: transform;
+      transform: translateZ(0);
+      backface-visibility: hidden;
       animation: ticker-scroll 70s linear infinite;
     }
     .stock-viewport:hover .stock-track {
