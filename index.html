@@ -28,7 +28,7 @@
       /* three columns: left, middle (wider), right */
       grid-template-columns: 1fr 1.05fr 1fr;
       /* rows: top area, bottom area, then two thin bars */
-      grid-template-rows: 1fr 1.6fr 40px 40px;
+      grid-template-rows: 1fr 1.6fr 120px 120px;
       grid-template-areas:
         "s1 s2 s6"
         "s3 s2 s7"
@@ -160,12 +160,12 @@
       flex: 0 0 auto;
       display: flex;
       align-items: center;
-      padding: 0 16px;
+      padding: 0 40px;
       background: #c8102e;
       color: #fff;
       font-weight: 800;
       letter-spacing: 0.12em;
-      font-size: 14px;
+      font-size: 40px;
       text-transform: uppercase;
       z-index: 2;
     }
@@ -189,17 +189,17 @@
     .ticker-item {
       display: inline-flex;
       align-items: center;
-      padding: 0 28px;
-      font-size: 14px;
+      padding: 0 70px;
+      font-size: 40px;
       color: #f0f0f0;
     }
     .ticker-item::before {
       content: "";
-      width: 7px;
-      height: 7px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       background: #c8102e;
-      margin-right: 14px;
+      margin-right: 34px;
       flex: 0 0 auto;
     }
     @keyframes ticker-scroll {
@@ -220,12 +220,12 @@
       flex: 0 0 auto;
       display: flex;
       align-items: center;
-      padding: 0 16px;
+      padding: 0 40px;
       background: #1a5c3a;
       color: #fff;
       font-weight: 800;
       letter-spacing: 0.12em;
-      font-size: 14px;
+      font-size: 40px;
       text-transform: uppercase;
       z-index: 2;
     }
@@ -249,9 +249,9 @@
     .stock-item {
       display: inline-flex;
       align-items: baseline;
-      gap: 8px;
-      padding: 0 22px;
-      font-size: 14px;
+      gap: 20px;
+      padding: 0 55px;
+      font-size: 40px;
       border-right: 1px solid rgba(255,255,255,0.12);
     }
     .stock-sym { font-weight: 700; color: #e8eef3; letter-spacing: 0.04em; }
