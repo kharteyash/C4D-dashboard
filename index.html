@@ -639,40 +639,42 @@
       if (live && live.length) renderTicker(live);
     }, 10 * 60 * 1000);
 
-    // ----- Stock ticker -----
-    // Symbols relevant to a mortgage dashboard: indices, 10Y yield, mortgage
-    // lenders, homebuilders, big banks. label = display name.
+    // ----- Stock ticker (live from Finnhub — finnhub.io) -----
+    // Finnhub allows direct browser calls (CORS *), so no flaky proxy is needed.
+    // Get a FREE key at https://finnhub.io/register and paste it below.
+    const FINNHUB_KEY = "d8tul51r01qinhuel2ngd8tul51r01qinhuel2o0";
+
+    // Finnhub's free tier covers US stocks/ETFs (not raw indices), so the major
+    // indices use their tracking ETFs: SPY=S&P 500, DIA=Dow, QQQ=Nasdaq-100.
     const SYMBOLS = [
-      { sym: "^GSPC", label: "S&P 500" },
-      { sym: "^DJI",  label: "DOW" },
-      { sym: "^IXIC", label: "NASDAQ" },
-      { sym: "^TNX",  label: "10Y YIELD" },
-      { sym: "RKT",   label: "RKT" },
-      { sym: "UWMC",  label: "UWMC" },
-      { sym: "PFSI",  label: "PFSI" },
-      { sym: "COOP",  label: "COOP" },
-      { sym: "DHI",   label: "DHI" },
-      { sym: "LEN",   label: "LEN" },
-      { sym: "ZG",    label: "ZG" },
-      { sym: "JPM",   label: "JPM" },
-      { sym: "WFC",   label: "WFC" }
+      { sym: "SPY",  label: "S&P 500" },
+      { sym: "DIA",  label: "DOW" },
+      { sym: "QQQ",  label: "NASDAQ" },
+      { sym: "RKT",  label: "RKT" },
+      { sym: "UWMC", label: "UWMC" },
+      { sym: "PFSI", label: "PFSI" },
+      { sym: "COOP", label: "COOP" },
+      { sym: "DHI",  label: "DHI" },
+      { sym: "LEN",  label: "LEN" },
+      { sym: "ZG",   label: "ZG" },
+      { sym: "JPM",  label: "JPM" },
+      { sym: "WFC",  label: "WFC" }
     ];
 
-    // Approximate real values (June 23, 2026) used as the offline fallback.
+    // Shown briefly on load and only if the live fetch fails. Approximate.
     const FALLBACK_QUOTES = [
-      { label: "S&P 500",   price: 6180.42, chgPct: -0.97 },
-      { label: "DOW",       price: 43210.5, chgPct:  0.25 },
-      { label: "NASDAQ",    price: 19875.3, chgPct: -1.50 },
-      { label: "10Y YIELD", price: 4.62,    chgPct:  1.10 },
-      { label: "RKT",       price: 13.85,   chgPct: -1.20 },
-      { label: "UWMC",      price: 5.42,    chgPct: -0.80 },
-      { label: "PFSI",      price: 112.30,  chgPct:  0.45 },
-      { label: "COOP",      price: 98.70,   chgPct:  0.60 },
-      { label: "DHI",       price: 142.10,  chgPct: -1.05 },
-      { label: "LEN",       price: 118.45,  chgPct: -0.90 },
-      { label: "ZG",        price: 71.20,   chgPct: -1.60 },
-      { label: "JPM",       price: 268.40,  chgPct:  0.30 },
-      { label: "WFC",       price: 78.95,   chgPct: -0.15 }
+      { label: "S&P 500", price: 615.00, chgPct: -0.97 },
+      { label: "DOW",     price: 432.00, chgPct:  0.25 },
+      { label: "NASDAQ",  price: 545.00, chgPct: -1.50 },
+      { label: "RKT",     price: 14.84,  chgPct:  1.27 },
+      { label: "UWMC",    price: 5.42,   chgPct: -0.80 },
+      { label: "PFSI",    price: 112.30, chgPct:  0.45 },
+      { label: "COOP",    price: 98.70,  chgPct:  0.60 },
+      { label: "DHI",     price: 142.10, chgPct: -1.05 },
+      { label: "LEN",     price: 118.45, chgPct: -0.90 },
+      { label: "ZG",      price: 71.20,  chgPct: -1.60 },
+      { label: "JPM",     price: 268.40, chgPct:  0.30 },
+      { label: "WFC",     price: 78.95,  chgPct: -0.15 }
     ];
 
     function fmtPrice(p) {
@@ -696,20 +698,18 @@
     }
 
     async function fetchOneQuote(item) {
-      const yahoo = "https://query1.finance.yahoo.com/v8/finance/chart/" +
-                    encodeURIComponent(item.sym) + "?interval=1d&range=1d";
-      const proxied = "https://api.allorigins.win/raw?url=" + encodeURIComponent(yahoo);
-      const res = await fetch(proxied);
+      const url = "https://finnhub.io/api/v1/quote?symbol=" +
+                  encodeURIComponent(item.sym) + "&token=" + FINNHUB_KEY;
+      const res = await fetch(url);
       if (!res.ok) throw new Error("bad status");
-      const data = await res.json();
-      const meta = data.chart.result[0].meta;
-      const price = meta.regularMarketPrice;
-      const prev = meta.chartPreviousClose ?? meta.previousClose;
-      const chgPct = prev ? ((price - prev) / prev) * 100 : 0;
-      return { label: item.label, price, chgPct };
+      const d = await res.json();
+      // Finnhub: c = current price, dp = percent change, pc = previous close.
+      if (typeof d.c !== "number" || d.c === 0) throw new Error("no price");
+      return { label: item.label, price: d.c, chgPct: (typeof d.dp === "number" ? d.dp : 0) };
     }
 
     async function fetchLiveQuotes() {
+      if (!FINNHUB_KEY || FINNHUB_KEY === "YOUR_FINNHUB_API_KEY") return null; // no key yet
       const results = await Promise.allSettled(SYMBOLS.map(fetchOneQuote));
       const ok = results
         .filter(r => r.status === 'fulfilled' && isFinite(r.value.price))
