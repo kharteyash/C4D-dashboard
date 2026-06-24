@@ -25,6 +25,15 @@
       padding: 8px;
     }
 
+    /* Twemoji emoji images scale with the surrounding font-size */
+    img.emoji {
+      height: 1em;
+      width: 1em;
+      margin: 0 0.05em 0 0.05em;
+      vertical-align: -0.12em;
+      display: inline-block;
+    }
+
     .dashboard {
       display: grid;
       height: calc(100vh - 16px);
@@ -737,7 +746,21 @@
     </div>
   </div>
 
+  <!-- Twemoji renders emoji as images so they look identical on the Pi (no font dependency) -->
+  <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@15.1.0/dist/twemoji.min.js" crossorigin="anonymous"></script>
+
   <script>
+    // ----- Emoji as images (consistent on Raspberry Pi) -----
+    function twemojify(el) {
+      if (window.twemoji && el) {
+        window.twemoji.parse(el, {
+          base: "https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/",
+          folder: "svg",
+          ext: ".svg"
+        });
+      }
+    }
+
     // ----- Auto-reload (keeps a long-running TV kiosk fresh) -----
     // Reloads the whole page every 60 minutes to clear any memory drift.
     setTimeout(function () { location.reload(); }, 60 * 60 * 1000);
@@ -1184,10 +1207,12 @@
           }
           document.getElementById('wxForecast').innerHTML = fc;
         }
+        twemojify(document.querySelector('.s6'));   // render the weather emoji as images
       } catch (e) {
         document.getElementById('wxCond').textContent = "Weather unavailable right now";
         document.getElementById('wxSub').textContent = "Couldn't reach the weather service.";
         document.getElementById('wxQuip').textContent = "🌡️ Trust us, it's Michigan out there.";
+        twemojify(document.querySelector('.s6'));
       }
     }
 
@@ -1358,6 +1383,9 @@
     setInterval(rotateFlavor, 8000);     // flavor line rotates every 8s
     fetchWeather();
     setInterval(fetchWeather, 10 * 60 * 1000); // weather refresh every 10 min
+
+    // Convert any static emoji already on the page (logo footer, placeholders) to images.
+    twemojify(document.body);
   </script>
 </body>
 </html>
