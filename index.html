@@ -865,13 +865,6 @@
       "Markets react to high consumer prices and resilient labor data"
     ];
 
-    // RSS feeds to try (housing / mortgage / finance), converted to JSON via rss2json.
-    const FEEDS = [
-      "https://www.housingwire.com/feed/",
-      "https://www.cnbc.com/id/10000115/device/rss/rss.html", // CNBC Real Estate
-      "https://www.cnbc.com/id/15839135/device/rss/rss.html"  // CNBC Finance
-    ];
-
     function renderTicker(headlines) {
       const track = document.getElementById('tickerTrack');
       // Duplicate the list so the -50% scroll loops seamlessly.
@@ -888,18 +881,14 @@
     }
 
     async function fetchLiveHeadlines() {
-      for (const feed of FEEDS) {
-        try {
-          const url = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(feed);
-          const res = await fetch(url);
-          if (!res.ok) continue;
-          const data = await res.json();
-          if (data.status === 'ok' && data.items && data.items.length) {
-            return data.items.slice(0, 15).map(i => i.title.trim());
-          }
-        } catch (e) {
-          // network/CORS error — try the next feed
-        }
+      // Combined headlines from all chosen feeds, served by our Netlify function.
+      try {
+        const res = await fetch('/.netlify/functions/news', { cache: 'no-store' });
+        if (!res.ok) throw new Error('bad status');
+        const data = await res.json();
+        if (data.headlines && data.headlines.length) return data.headlines;
+      } catch (e) {
+        // fall back to the static list below
       }
       return null;
     }
