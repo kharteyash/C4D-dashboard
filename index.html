@@ -879,7 +879,8 @@
       { label: "GOLD",      price: 4000.90, chgPct: -2.74 },
       { label: "SILVER",    price: 58.89,   chgPct: -4.61 },
       { label: "PLATINUM",  price: 1589.00, chgPct: -4.55 },
-      { label: "PALLADIUM", price: 1193.00, chgPct: -4.79 }
+      { label: "PALLADIUM", price: 1193.00, chgPct: -4.79 },
+      { label: "BTC",       price: 60225,   chgPct: -3.85 }
     ];
 
     function fmtPrice(p) {
@@ -928,11 +929,21 @@
       return { label: m.label, price: d.price, chgPct };
     }
 
+    async function fetchBitcoin() {
+      // Bitcoin spot + 24h change from CoinGecko (keyless, CORS-enabled).
+      const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true");
+      if (!res.ok) throw new Error("btc bad status");
+      const d = await res.json();
+      const b = d.bitcoin;
+      if (!b || typeof b.usd !== "number") throw new Error("no price");
+      return { label: "BTC", price: b.usd, chgPct: (typeof b.usd_24h_change === "number" ? b.usd_24h_change : 0) };
+    }
+
     async function fetchLiveQuotes() {
       const stockJobs = (FINNHUB_KEY && FINNHUB_KEY !== "YOUR_FINNHUB_API_KEY")
         ? SYMBOLS.map(fetchOneQuote) : [];
       const metalJobs = METALS.map(fetchOneMetal);
-      const results = await Promise.allSettled([...stockJobs, ...metalJobs]);
+      const results = await Promise.allSettled([...stockJobs, ...metalJobs, fetchBitcoin()]);
       const ok = results
         .filter(r => r.status === 'fulfilled' && isFinite(r.value.price))
         .map(r => r.value);
