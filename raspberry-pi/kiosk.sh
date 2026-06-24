@@ -1,27 +1,21 @@
 #!/bin/bash
 # SafeTrust dashboard kiosk launcher for Raspberry Pi.
-# Path to the dashboard HTML file on the Pi:
-DASHBOARD="/home/pi/dashboard/index.html"
+# For Raspberry Pi OS (Debian 13 "trixie") — Wayland / labwc.
+DASHBOARD="https://safetrust-dashboard.netlify.app/"
 
-# --- Keep the screen awake (no blanking / screensaver) ---
-export DISPLAY=:0
-xset s off          # disable screensaver
-xset -dpms          # disable display power management
-xset s noblank      # don't blank the video device
+# Use whichever Chromium is installed (chromium-browser on Pi OS, chromium on Debian).
+CHROME="$(command -v chromium-browser || command -v chromium)"
 
-# Hide the mouse cursor when idle
-unclutter -idle 0.5 -root &
-
-# --- Launch Chromium in kiosk mode, and relaunch it if it ever dies ---
+# Launch Chromium in kiosk mode, and relaunch it if it ever dies.
 while true; do
-  # Clean up any "didn't shut down cleanly" restore bubble
+  # Clear any crash flags so no "restore pages" bubble appears after a hard power-off.
   CFG="$HOME/.config/chromium/Default/Preferences"
   if [ -f "$CFG" ]; then
     sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' "$CFG"
-    sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' "$CFG"
+    sed -i 's/"exit_type":"[^"]*"/"exit_type":"Normal"/' "$CFG"
   fi
 
-  chromium-browser \
+  "$CHROME" \
     --kiosk \
     --incognito \
     --noerrordialogs \
@@ -30,6 +24,8 @@ while true; do
     --disable-features=Translate \
     --check-for-update-interval=31536000 \
     --autoplay-policy=no-user-gesture-required \
+    --ozone-platform-hint=auto \
+    --password-store=basic \
     "$DASHBOARD"
 
   # If Chromium exits for any reason, wait a moment and relaunch.
