@@ -576,6 +576,8 @@
     }
     .cal-m-event.meeting { background: #2b5aa8; color: #ffffff; }
     .cal-m-event.holiday { background: #f3b21b; color: #3a2a00; }
+    .cal-m-event.processing { background: #1a7f37; color: #ffffff; }
+    .cal-m-event.sales { background: #6b4fa8; color: #ffffff; }
   </style>
 </head>
 <body>
@@ -1252,11 +1254,20 @@
         } else {
           num = dayNum;
           const dow = new Date(year, month, dayNum).getDay();
+          const isHoliday = !!holidays[dayNum];
           if (dayNum === today) cls += " cal-m-today";
-          if (dow === 3) events += '<div class="cal-m-event meeting">Weekly Meeting</div>';
+
+          // Holiday chips first
           (holidays[dayNum] || []).forEach(n => {
             events += '<div class="cal-m-event holiday">' + n + '</div>';
           });
+
+          // Recurring work events on non-holiday weekdays (Mon-Fri), in time order
+          if (!isHoliday && dow >= 1 && dow <= 5) {
+            if (dow === 3) events += '<div class="cal-m-event meeting">9a Weekly Meeting</div>';
+            events += '<div class="cal-m-event processing">11a Processing Preapproval Support</div>';
+            events += '<div class="cal-m-event sales">2p LO Sales Support</div>';
+          }
         }
         cells += '<div class="' + cls + '"><div class="cal-m-num">' + num + '</div>' +
                  '<div class="cal-m-events">' + events + '</div></div>';
