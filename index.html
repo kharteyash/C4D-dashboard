@@ -428,9 +428,12 @@
       justify-content: space-between;
       gap: 28px;
     }
-    .wx-time {
-      border-right: 2px solid #cdd7e5;
-      padding-right: 28px;
+    .wx-divider {
+      align-self: stretch;
+      flex: 0 0 auto;
+      width: 2px;
+      background: #cdd7e5;
+      border-radius: 1px;
     }
     .wx-weather {
       display: flex;
@@ -712,6 +715,8 @@
           <div class="wx-clock" id="wxClock">--:--<span class="ampm" id="wxAmPm"></span></div>
           <div class="wx-date" id="wxDate">—</div>
         </div>
+
+        <div class="wx-divider"></div>
 
         <div class="wx-weather">
           <div>
