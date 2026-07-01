@@ -649,6 +649,61 @@
     .cal-m-event.holiday { background: #f3b21b; color: #3a2a00; }
     .cal-m-event.processing { background: #1a7f37; color: #ffffff; }
     .cal-m-event.sales { background: #6b4fa8; color: #ffffff; }
+
+    /* ----- Today's Mortgage Rates (section 7) ----- */
+    .rates-header { flex: 0 0 auto; margin-bottom: 12px; }
+    .rates-title {
+      font-size: clamp(22px, 2.6vw, 36px);
+      font-weight: 800;
+      color: #14202b;
+      line-height: 1.05;
+    }
+    .rates-sub {
+      font-size: clamp(11px, 1.2vw, 15px);
+      color: #8a96a2;
+      margin-top: 3px;
+    }
+    .rates-grid {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 24px;
+    }
+    .rate-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-top: 1px solid #ececec;
+      padding-top: 6px;
+    }
+    .rate-name {
+      font-size: clamp(14px, 1.5vw, 21px);
+      font-weight: 700;
+      color: #6b7785;
+      letter-spacing: 0.01em;
+    }
+    .rate-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .rate-value {
+      font-size: clamp(26px, 3.4vw, 50px);
+      font-weight: 800;
+      color: #14202b;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+    .rate-chg {
+      font-size: clamp(14px, 1.6vw, 22px);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .rate-chg.up { color: #c8102e; }
+    .rate-chg.down { color: #1a7f37; }
+    .rate-chg.unchanged { color: #8a96a2; }
   </style>
 </head>
 <body>
@@ -727,23 +782,18 @@
       <div class="wx-quip" id="wxQuip">&nbsp;</div>
     </div>
     <div class="panel s7">
-      <!-- OLD DAY VIEW (commented out — kept so it can be restored)
-      <div class="cal-header">
-        <div class="cal-weekday" id="calWeekday">—</div>
-        <div class="cal-date" id="calDate">—</div>
-      </div>
-      <div class="cal-tz" id="calTz">GMT-04</div>
-      <div class="cal-grid" id="calGrid"></div>
+      <!-- CALENDAR (commented out — replaced by Today's Mortgage Rates; restore this block
+           and re-enable renderMonthCalendar() in the script to bring the calendar back)
+      <div class="cal-m-header"><div class="cal-m-title" id="calMTitle"></div></div>
+      <div class="cal-m-weekdays"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
+      <div class="cal-m-grid" id="calMGrid"></div>
       -->
 
-      <!-- MONTHLY VIEW -->
-      <div class="cal-m-header">
-        <div class="cal-m-title" id="calMTitle">—</div>
+      <div class="rates-header">
+        <div class="rates-title">Today's Mortgage Rates</div>
+        <div class="rates-sub" id="ratesSub">Mortgage News Daily rate index · updated weekdays ~4 PM ET</div>
       </div>
-      <div class="cal-m-weekdays">
-        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
-      </div>
-      <div class="cal-m-grid" id="calMGrid"></div>
+      <div class="rates-grid" id="ratesGrid"></div>
     </div>
   </div>
 
@@ -1418,8 +1468,39 @@
       document.getElementById('calMGrid').innerHTML = cells;
     }
 
-    renderMonthCalendar();
-    setInterval(renderMonthCalendar, 60 * 1000);   // re-check each minute so the month rolls over automatically
+    // Calendar replaced by Today's Mortgage Rates — re-enable these to restore it:
+    // renderMonthCalendar();
+    // setInterval(renderMonthCalendar, 60 * 1000);
+
+    // ----- Today's Mortgage Rates (section 7) — MND via Netlify function -----
+    function renderRates(rates) {
+      const grid = document.getElementById('ratesGrid');
+      if (!grid) return;
+      grid.innerHTML = rates.map(r => {
+        const dir = (r.dir === 'up' || r.dir === 'down') ? r.dir : 'unchanged';
+        const arrow = dir === 'up' ? '▲' : (dir === 'down' ? '▼' : '');
+        return '<div class="rate-card">' +
+                 '<div class="rate-name">' + escapeHtml(r.name) + '</div>' +
+                 '<div class="rate-row">' +
+                   '<span class="rate-value">' + escapeHtml(r.rate) + '</span>' +
+                   '<span class="rate-chg ' + dir + '">' + arrow + ' ' + escapeHtml(r.change) + '</span>' +
+                 '</div>' +
+               '</div>';
+      }).join('');
+    }
+
+    async function fetchRates() {
+      try {
+        const res = await fetch('/.netlify/functions/rates', { cache: 'no-store' });
+        if (!res.ok) throw new Error('bad status');
+        const d = await res.json();
+        if (d.rates && d.rates.length) renderRates(d.rates);
+      } catch (e) {
+        // keep whatever is shown if a refresh fails
+      }
+    }
+    fetchRates();
+    setInterval(fetchRates, 30 * 60 * 1000);   // refresh every 30 minutes
 
     tickClock();
     setInterval(tickClock, 1000);        // clock ticks every second
