@@ -5,7 +5,7 @@ const UA =
   "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
 exports.handler = async () => {
-  const url = "https://query1.finance.yahoo.com/v8/finance/chart/%5ETNX?interval=1d&range=6mo";
+  const url = "https://query1.finance.yahoo.com/v8/finance/chart/%5ETNX?interval=1d&range=3mo";
   try {
     const res = await fetch(url, { headers: { "User-Agent": UA } });
     if (!res.ok) throw new Error("Yahoo " + res.status);
