@@ -7,7 +7,6 @@ const FEEDS = [
   { name: "The Mortgage Reports",    url: "https://themortgagereports.com/feed" },
   { name: "HousingWire",             url: "https://www.housingwire.com/feed/" },
   { name: "Redfin News",             url: "https://www.redfin.com/news/feed/" },
-  { name: "Realtor.com",             url: "https://www.realtor.com/news/feed/" },
   { name: "CNBC Real Estate",        url: "https://www.cnbc.com/id/10000115/device/rss/rss.html" },
   { name: "Keeping Current Matters", url: "https://www.keepingcurrentmatters.com/feed/" },
   { name: "Truth About Mortgage",    url: "https://www.thetruthaboutmortgage.com/feed/" }
