@@ -677,18 +677,10 @@
       </div>
       <div class="tsy-bottom">
       <div class="tsy-header">
-        <span>U.S. 10-Year Treasury</span>
+        <span>U.S. 10-Year Treasury · 6M</span>
         <span class="tsy-src">US10Y</span>
       </div>
-      <div class="tsy-widget">
-        <!-- TradingView chart embedded by URL — symbol locked to TVC:US10Y -->
-        <iframe
-          title="U.S. 10-Year Treasury Yield"
-          src="https://s.tradingview.com/widgetembed/?symbol=FRED%3ADGS10&interval=D&theme=light&style=3&hidesidetoolbar=1&hidetoptoolbar=0&symboledit=0&saveimage=0&timezone=America%2FNew_York&hideideas=1&locale=en"
-          style="width:100%;height:100%;border:0;display:block;"
-          frameborder="0" scrolling="no" allowtransparency="true">
-        </iframe>
-      </div>
+      <div class="tsy-widget" id="tsyChart"></div>
       </div>
     </div>
     <div class="panel s4">
@@ -757,6 +749,8 @@
 
   <!-- Twemoji renders emoji as images so they look identical on the Pi (no font dependency) -->
   <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@15.1.0/dist/twemoji.min.js" crossorigin="anonymous"></script>
+  <!-- Lightweight Charts for the live 10-Year Treasury graph -->
+  <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
 
   <script>
     // ----- Emoji as images (consistent on Raspberry Pi) -----
@@ -802,6 +796,49 @@
     }
     fetchTreasuryNumber();
     setInterval(fetchTreasuryNumber, 60 * 1000);
+
+    // ----- 10-Year Treasury chart (section 3 bottom) — live ^TNX via Netlify function -----
+    function initTreasuryChart() {
+      const el = document.getElementById('tsyChart');
+      if (!el || !window.LightweightCharts) return;
+      const chart = LightweightCharts.createChart(el, {
+        autoSize: true,
+        layout: { background: { color: 'transparent' }, textColor: '#8a96a2', fontSize: 12 },
+        rightPriceScale: { borderColor: '#e6e6e6' },
+        timeScale: { borderColor: '#e6e6e6', fixLeftEdge: true, fixRightEdge: true },
+        grid: {
+          vertLines: { color: 'rgba(43,90,168,0.05)' },
+          horzLines: { color: 'rgba(43,90,168,0.06)' }
+        },
+        crosshair: { mode: 0 },
+        handleScroll: false,
+        handleScale: false
+      });
+      const series = chart.addAreaSeries({
+        lineColor: '#2b5aa8',
+        topColor: 'rgba(43,90,168,0.25)',
+        bottomColor: 'rgba(43,90,168,0.02)',
+        lineWidth: 2,
+        priceFormat: { type: 'custom', formatter: v => v.toFixed(2) + '%' }
+      });
+
+      async function load() {
+        try {
+          const res = await fetch('/.netlify/functions/tnx', { cache: 'no-store' });
+          if (!res.ok) throw new Error('bad status');
+          const d = await res.json();
+          if (d.series && d.series.length) {
+            series.setData(d.series);
+            chart.timeScale().fitContent();
+          }
+        } catch (e) {
+          // keep whatever is shown if a refresh fails
+        }
+      }
+      load();
+      setInterval(load, 5 * 60 * 1000);   // refresh the chart every 5 minutes
+    }
+    initTreasuryChart();
 
     // ----- Image slideshow (section 2) -----
     // Cycles flyer pages from the "Safetrust Company Member Book Flyer" folder,
