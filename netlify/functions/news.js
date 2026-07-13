@@ -9,7 +9,8 @@ const FEEDS = [
   { name: "Redfin News",             url: "https://www.redfin.com/news/feed/" },
   { name: "CNBC Real Estate",        url: "https://www.cnbc.com/id/10000115/device/rss/rss.html" },
   { name: "Keeping Current Matters", url: "https://www.keepingcurrentmatters.com/feed/" },
-  { name: "Truth About Mortgage",    url: "https://www.thetruthaboutmortgage.com/feed/" }
+  { name: "Truth About Mortgage",    url: "https://www.thetruthaboutmortgage.com/feed/" },
+  { name: "Inman",                   url: "https://feeds.feedburner.com/inmannews" }
 ];
 
 const UA =
