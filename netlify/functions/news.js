@@ -10,7 +10,8 @@ const FEEDS = [
   { name: "CNBC Real Estate",        url: "https://www.cnbc.com/id/10000115/device/rss/rss.html" },
   { name: "Keeping Current Matters", url: "https://www.keepingcurrentmatters.com/feed/" },
   { name: "Truth About Mortgage",    url: "https://www.thetruthaboutmortgage.com/feed/" },
-  { name: "Inman",                   url: "https://feeds.feedburner.com/inmannews" }
+  { name: "Inman",                   url: "https://feeds.feedburner.com/inmannews" },
+  { name: "National Mortgage Professional", url: "https://nationalmortgageprofessional.com/rss.xml" }
 ];
 
 const UA =
