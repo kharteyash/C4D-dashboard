@@ -39,9 +39,9 @@
       height: calc(100vh - 16px);
       gap: 8px;
       /* three columns: left, middle (wider), right */
-      grid-template-columns: 1fr 1.05fr 1fr;
+      grid-template-columns: 1fr 1.45fr 1fr;
       /* rows: top area, bottom area, then two thin bars (vh so they scale on 4K TVs) */
-      grid-template-rows: 1fr 1.6fr 11vh 11vh;
+      grid-template-rows: 1fr 1.6fr 2.75vh 2.75vh;
       grid-template-areas:
         "s3 s1 s6"
         "s3 s1 s7"
@@ -73,7 +73,7 @@
       align-items: center;
       justify-content: center;
       /* extra bottom padding keeps the logo clear of the footer text */
-      padding: 3vh 2vw 26vh;
+      padding: 1.5vh 0.5vw 24vh;
     }
     .logo-img {
       width: 100%;
@@ -188,7 +188,7 @@
       background: linear-gradient(90deg, #f26522, #8dc63f);
     }
     .tsy-number {
-      font-size: clamp(80px, 22vh, 540px);
+      font-size: clamp(72px, 19vh, 470px);
       font-weight: 800;
       line-height: 1;
       letter-spacing: 0.01em;
@@ -238,12 +238,12 @@
       flex: 0 0 auto;
       display: flex;
       align-items: center;
-      padding: 0 2vw;
+      padding: 0 1.2vw;
       background: #f26522;
       color: #fff;
       font-weight: 800;
       letter-spacing: 0.12em;
-      font-size: clamp(24px, 4vh, 88px);
+      font-size: clamp(13px, 1.9vh, 46px);
       text-transform: uppercase;
       z-index: 2;
     }
@@ -269,17 +269,17 @@
     .ticker-item {
       display: inline-flex;
       align-items: center;
-      padding: 0 3.5vw;
-      font-size: clamp(24px, 4vh, 88px);
+      padding: 0 2vw;
+      font-size: clamp(13px, 1.9vh, 46px);
       color: #f0f0f0;
     }
     .ticker-item::before {
       content: "";
-      width: 1.7vh;
-      height: 1.7vh;
+      width: 0.9vh;
+      height: 0.9vh;
       border-radius: 50%;
       background: #8dc63f;
-      margin-right: 1.7vw;
+      margin-right: 1vw;
       flex: 0 0 auto;
     }
     @keyframes ticker-scroll {
@@ -300,12 +300,12 @@
       flex: 0 0 auto;
       display: flex;
       align-items: center;
-      padding: 0 2vw;
+      padding: 0 1.2vw;
       background: #6f9c2f;
       color: #fff;
       font-weight: 800;
       letter-spacing: 0.12em;
-      font-size: clamp(24px, 4vh, 88px);
+      font-size: clamp(13px, 1.9vh, 46px);
       text-transform: uppercase;
       z-index: 2;
     }
@@ -331,9 +331,9 @@
     .stock-item {
       display: inline-flex;
       align-items: baseline;
-      gap: 1vw;
-      padding: 0 2.8vw;
-      font-size: clamp(24px, 4vh, 88px);
+      gap: 0.8vw;
+      padding: 0 2vw;
+      font-size: clamp(13px, 1.9vh, 46px);
       border-right: 1px solid rgba(255,255,255,0.12);
     }
     .stock-sym { font-weight: 700; color: #e8eef3; letter-spacing: 0.04em; }
@@ -373,7 +373,7 @@
       margin-left: 6px;
     }
     .wx-date {
-      font-size: clamp(14px, 2vh, 50px);
+      font-size: clamp(13px, 1.8vh, 46px);
       font-weight: 600;
       color: #3a4754;
       margin-top: 2px;
@@ -383,10 +383,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1vw;
+      gap: 0.8vw;
     }
     /* let the weather text wrap instead of overflowing the panel */
     .wx-mid > *, .wx-weather, .wx-weather > div { min-width: 0; }
+    .wx-time { flex: 0 0 auto; }
     .wx-divider {
       align-self: stretch;
       flex: 0 0 auto;
@@ -682,7 +683,7 @@
   <div class="dashboard">
     <div class="panel s1">
       <div class="s1-logo">
-        <svg class="logo-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 340" role="img" aria-label="C4D Mortgage logo">
+        <svg class="logo-img" xmlns="http://www.w3.org/2000/svg" viewBox="25 20 510 290" role="img" aria-label="C4D Mortgage logo">
           <defs>
             <clipPath id="roofClip"><polygon points="180,172 280,66 380,172"/></clipPath>
             <clipPath id="baseClip"><polygon points="176,224 384,224 280,282"/></clipPath>
