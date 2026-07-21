@@ -1,7 +1,7 @@
 #!/bin/bash
 # C4D Mortgage dashboard kiosk launcher for Raspberry Pi.
 # For Raspberry Pi OS (Debian 13 "trixie") — Wayland / labwc.
-DASHBOARD="https://c4d-dashboard.netlify.app/"
+DASHBOARD="https://lucent-cocada-4772fc.netlify.app/"
 
 # Use whichever Chromium is installed (chromium-browser on Pi OS, chromium on Debian).
 CHROME="$(command -v chromium-browser || command -v chromium)"

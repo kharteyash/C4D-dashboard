@@ -7,7 +7,7 @@
   <!-- Color emoji font so weather icons render on Linux/Raspberry Pi (no system emoji font) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Montserrat:wght@800;900&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -20,7 +20,7 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif, "Noto Color Emoji";
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif, "Noto Color Emoji";
       background: #2b2f33;
       padding: 8px;
     }
@@ -40,8 +40,8 @@
       gap: 8px;
       /* three columns: left, middle (wider), right */
       grid-template-columns: 1fr 1.05fr 1fr;
-      /* rows: top area, bottom area, then two thin bars */
-      grid-template-rows: 1fr 1.6fr 120px 120px;
+      /* rows: top area, bottom area, then two thin bars (vh so they scale on 4K TVs) */
+      grid-template-rows: 1fr 1.6fr 11vh 11vh;
       grid-template-areas:
         "s3 s1 s6"
         "s3 s1 s7"
@@ -73,12 +73,11 @@
       align-items: center;
       justify-content: center;
       /* extra bottom padding keeps the logo clear of the footer text */
-      padding: 32px 40px 260px;
+      padding: 3vh 2vw 26vh;
     }
     .logo-img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
+      width: 100%;
+      height: 100%;
     }
     .s1-footer {
       position: absolute;
@@ -89,31 +88,31 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
-      padding: 24px 16px 36px;
+      gap: 1.1vh;
+      padding: 2vh 1vw 3.4vh;
       background: transparent;
     }
     .s1-divider {
-      width: 140px;
-      height: 5px;
+      width: clamp(140px, 9vw, 320px);
+      height: 0.5vh;
       border-radius: 3px;
       background: linear-gradient(90deg, #f26522, #8dc63f);
-      margin-bottom: 8px;
+      margin-bottom: 0.8vh;
     }
     .s1-tagline {
-      font-size: clamp(28px, 2.9vw, 44px);
+      font-size: clamp(20px, 3.4vh, 84px);
       font-style: italic;
       color: #6b7785;
     }
     .s1-web {
-      font-size: clamp(36px, 3.6vw, 60px);
+      font-size: clamp(28px, 5vh, 124px);
       font-weight: 700;
       letter-spacing: 0.02em;
       color: #f26522;
       text-decoration: none;
     }
     .s1-nmls {
-      font-size: clamp(28px, 2.7vw, 42px);
+      font-size: clamp(20px, 3.6vh, 88px);
       font-weight: 600;
       letter-spacing: 0.08em;
       color: #8a96a2;
@@ -143,14 +142,14 @@
       flex-direction: column;
       align-items: stretch;
       justify-content: flex-start;
-      padding: 48px;
+      padding: 3vh 1.5vw;
       overflow: hidden;
     }
     .tsy-header {
       flex: 0 0 auto;
       padding: 10px 14px;
       font-weight: 700;
-      font-size: clamp(12px, 1.3vw, 15px);
+      font-size: clamp(12px, 1.8vh, 42px);
       color: #2b2f33;
       border-bottom: 1px solid #ececec;
       letter-spacing: 0.02em;
@@ -159,7 +158,7 @@
       justify-content: space-between;
     }
     .tsy-top {
-      flex: 0 0 40%;
+      flex: 0 0 45%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -169,7 +168,7 @@
       text-align: center;
     }
     .tsy-title {
-      font-size: clamp(39px, 4.8vw, 60px);
+      font-size: clamp(32px, 5.5vh, 135px);
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.18em;
@@ -189,7 +188,7 @@
       background: linear-gradient(90deg, #f26522, #8dc63f);
     }
     .tsy-number {
-      font-size: clamp(88px, 15vw, 192px);
+      font-size: clamp(80px, 22vh, 540px);
       font-weight: 800;
       line-height: 1;
       letter-spacing: 0.01em;
@@ -201,7 +200,7 @@
       text-shadow: 0 1px 1px rgba(242, 101, 34, 0.08);
     }
     .tsy-updated {
-      font-size: clamp(20px, 2.2vw, 26px);
+      font-size: clamp(16px, 2.4vh, 54px);
       color: #8a96a2;
       font-style: italic;
     }
@@ -212,7 +211,7 @@
       min-height: 0;
     }
     .tsy-src {
-      font-size: 10px;
+      font-size: clamp(10px, 0.6vw, 22px);
       font-weight: 800;
       letter-spacing: 0.08em;
       color: #6b7785;
@@ -239,12 +238,12 @@
       flex: 0 0 auto;
       display: flex;
       align-items: center;
-      padding: 0 40px;
+      padding: 0 2vw;
       background: #f26522;
       color: #fff;
       font-weight: 800;
       letter-spacing: 0.12em;
-      font-size: 40px;
+      font-size: clamp(24px, 4vh, 88px);
       text-transform: uppercase;
       z-index: 2;
     }
@@ -270,17 +269,17 @@
     .ticker-item {
       display: inline-flex;
       align-items: center;
-      padding: 0 70px;
-      font-size: 40px;
+      padding: 0 3.5vw;
+      font-size: clamp(24px, 4vh, 88px);
       color: #f0f0f0;
     }
     .ticker-item::before {
       content: "";
-      width: 18px;
-      height: 18px;
+      width: 1.7vh;
+      height: 1.7vh;
       border-radius: 50%;
       background: #8dc63f;
-      margin-right: 34px;
+      margin-right: 1.7vw;
       flex: 0 0 auto;
     }
     @keyframes ticker-scroll {
@@ -301,12 +300,12 @@
       flex: 0 0 auto;
       display: flex;
       align-items: center;
-      padding: 0 40px;
+      padding: 0 2vw;
       background: #6f9c2f;
       color: #fff;
       font-weight: 800;
       letter-spacing: 0.12em;
-      font-size: 40px;
+      font-size: clamp(24px, 4vh, 88px);
       text-transform: uppercase;
       z-index: 2;
     }
@@ -332,9 +331,9 @@
     .stock-item {
       display: inline-flex;
       align-items: baseline;
-      gap: 20px;
-      padding: 0 55px;
-      font-size: 40px;
+      gap: 1vw;
+      padding: 0 2.8vw;
+      font-size: clamp(24px, 4vh, 88px);
       border-right: 1px solid rgba(255,255,255,0.12);
     }
     .stock-sym { font-weight: 700; color: #e8eef3; letter-spacing: 0.04em; }
@@ -348,24 +347,19 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: stretch;
-      padding: 48px;
+      padding: 2vh 1.4vw;
       color: #1a2733;
       background: linear-gradient(160deg, #fdf0e6 0%, #ffffff 60%);
       text-align: left;
+      overflow: hidden;
     }
     .wx-greeting {
-      font-size: clamp(32px, 3.4vw, 41px);
+      font-size: clamp(22px, 2.7vh, 66px);
       font-weight: 600;
       color: #f26522;
     }
-    .wx-flavor {
-      font-size: clamp(27px, 2.67vw, 32px);
-      color: #6b7785;
-      margin-top: 2px;
-      font-style: italic;
-    }
     .wx-clock {
-      font-size: clamp(83px, 14.58vw, 156px);
+      font-size: clamp(48px, 6.6vh, 170px);
       font-weight: 800;
       line-height: 1;
       letter-spacing: 0.01em;
@@ -379,17 +373,20 @@
       margin-left: 6px;
     }
     .wx-date {
-      font-size: clamp(32px, 3.65vw, 44px);
+      font-size: clamp(14px, 2vh, 50px);
       font-weight: 600;
       color: #3a4754;
       margin-top: 2px;
+      white-space: nowrap;
     }
     .wx-mid {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 28px;
+      gap: 1vw;
     }
+    /* let the weather text wrap instead of overflowing the panel */
+    .wx-mid > *, .wx-weather, .wx-weather > div { min-width: 0; }
     .wx-divider {
       align-self: stretch;
       flex: 0 0 auto;
@@ -402,33 +399,28 @@
       align-items: center;
       gap: 14px;
     }
-    .wx-icon { font-size: clamp(83px, 12.15vw, 126px); line-height: 1; }
+    .wx-icon { font-size: clamp(40px, 5.2vh, 130px); line-height: 1; }
     .wx-temp-row {
       display: flex;
       align-items: center;
       gap: 14px;
     }
     .wx-temp {
-      font-size: clamp(83px, 14.58vw, 156px);
+      font-size: clamp(48px, 6.6vh, 170px);
       font-weight: 800;
       color: #2b2f33;
       line-height: 1;
       letter-spacing: 0.01em;
       font-variant-numeric: tabular-nums;
     }
-    .wx-cond { font-size: clamp(29px, 3.16vw, 37px); font-weight: 600; color: #3a4754; }
-    .wx-sub  { font-size: clamp(24px, 2.67vw, 29px); color: #6b7785; margin-top: 2px; }
+    .wx-cond { font-size: clamp(16px, 2.3vh, 56px); font-weight: 600; color: #3a4754; }
+    .wx-sub  { font-size: clamp(12px, 1.7vh, 42px); color: #6b7785; margin-top: 2px; }
     .wx-loc {
-      font-size: clamp(24px, 2.67vw, 29px);
+      font-size: clamp(12px, 1.7vh, 42px);
       font-weight: 700;
       letter-spacing: 0.02em;
       text-transform: uppercase;
       color: #9aa6b2;
-    }
-    .wx-quip {
-      font-size: clamp(27px, 2.92vw, 34px);
-      font-weight: 600;
-      color: #f26522;
     }
     .wx-forecast {
       display: flex;
@@ -438,18 +430,18 @@
       flex: 1 1 0;
       background: rgba(242, 101, 34, 0.07);
       border-radius: 8px;
-      padding: 6px 4px;
+      padding: 0.4vh 4px;
       text-align: center;
-      line-height: 1.25;
+      line-height: 1.15;
     }
     .wx-fc-name {
-      font-size: clamp(24px, 2.67vw, 29px);
+      font-size: clamp(12px, 1.8vh, 44px);
       font-weight: 700;
       color: #3a4754;
     }
-    .wx-fc-icon { font-size: clamp(44px, 5.35vw, 59px); }
+    .wx-fc-icon { font-size: clamp(22px, 2.8vh, 68px); }
     .wx-fc-temp {
-      font-size: clamp(24px, 2.67vw, 29px);
+      font-size: clamp(12px, 1.8vh, 44px);
       font-weight: 700;
       color: #2b2f33;
       font-variant-numeric: tabular-nums;
@@ -460,7 +452,7 @@
       flex-direction: column;
       align-items: stretch;
       justify-content: flex-start;
-      padding: 48px;
+      padding: 2.5vh 1.5vw;
       overflow: hidden;
       background: #ffffff;
       color: #1a2733;
@@ -615,7 +607,7 @@
     /* ----- Today's Mortgage Rates (section 7) ----- */
     .rates-header { flex: 0 0 auto; margin-bottom: 16px; }
     .rates-title {
-      font-size: clamp(44px, 5.2vw, 72px);
+      font-size: clamp(36px, 6.5vh, 160px);
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.04em;
@@ -636,7 +628,7 @@
       background: linear-gradient(90deg, #f26522, #8dc63f);
     }
     .rates-sub {
-      font-size: clamp(22px, 2.4vw, 30px);
+      font-size: clamp(16px, 2.6vh, 62px);
       color: #8a96a2;
       margin-top: 8px;
     }
@@ -655,7 +647,7 @@
       padding-top: 6px;
     }
     .rate-name {
-      font-size: clamp(28px, 3vw, 42px);
+      font-size: clamp(20px, 3.6vh, 88px);
       font-weight: 700;
       color: #6b7785;
       letter-spacing: 0.01em;
@@ -667,7 +659,7 @@
       flex-wrap: wrap;
     }
     .rate-value {
-      font-size: clamp(52px, 6.8vw, 100px);
+      font-size: clamp(40px, 8.2vh, 200px);
       font-weight: 800;
       line-height: 1.1;
       font-variant-numeric: tabular-nums;
@@ -677,7 +669,7 @@
       color: transparent;
     }
     .rate-chg {
-      font-size: clamp(28px, 3.2vw, 44px);
+      font-size: clamp(20px, 3.8vh, 92px);
       font-weight: 700;
       font-variant-numeric: tabular-nums;
     }
@@ -690,7 +682,42 @@
   <div class="dashboard">
     <div class="panel s1">
       <div class="s1-logo">
-        <img class="logo-img" src="images/c4d-logo.svg" alt="C4D Mortgage">
+        <svg class="logo-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 340" role="img" aria-label="C4D Mortgage logo">
+          <defs>
+            <clipPath id="roofClip"><polygon points="180,172 280,66 380,172"/></clipPath>
+            <clipPath id="baseClip"><polygon points="176,224 384,224 280,282"/></clipPath>
+          </defs>
+          <g fill="#8dc63f">
+            <circle cx="150" cy="80" r="26"/><circle cx="126" cy="96" r="18"/>
+            <circle cx="172" cy="66" r="18"/><circle cx="186" cy="90" r="14"/>
+            <circle cx="410" cy="80" r="26"/><circle cx="434" cy="96" r="18"/>
+            <circle cx="388" cy="66" r="18"/><circle cx="374" cy="90" r="14"/>
+          </g>
+          <polygon points="280,25 410,95 410,235 280,305 150,235 150,95" fill="#3d4247"/>
+          <polygon points="280,38 398,102 398,228 280,292 162,228 162,102" fill="#ffffff"/>
+          <polygon points="280,48 388,108 388,222 280,282 172,222 172,108" fill="#f26522"/>
+          <polygon points="180,172 280,66 380,172" fill="#3d4247" stroke="#ffffff" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M196,176 C240,128 305,102 372,122" fill="none" stroke="#f26522" stroke-width="11" clip-path="url(#roofClip)"/>
+          <g fill="#ffffff">
+            <rect x="252" y="102" width="9" height="11"/><rect x="264" y="102" width="9" height="11"/>
+            <rect x="252" y="116" width="9" height="11"/><rect x="264" y="116" width="9" height="11"/>
+            <rect x="287" y="102" width="9" height="11"/><rect x="299" y="102" width="9" height="11"/>
+            <rect x="287" y="116" width="9" height="11"/><rect x="299" y="116" width="9" height="11"/>
+          </g>
+          <polygon points="176,224 384,224 280,282" fill="#3d4247"/>
+          <path d="M220,246 Q280,226 352,236 Q288,240 232,256 Z" fill="#f26522" clip-path="url(#baseClip)"/>
+          <path d="M30,156 L115,156 L115,216 L30,216 L58,186 Z" fill="#f26522"/>
+          <path d="M530,156 L445,156 L445,216 L530,216 L502,186 Z" fill="#f26522"/>
+          <path d="M115,156 L103,148 L115,148 Z" fill="#c94f16"/>
+          <path d="M115,216 L103,224 L115,224 Z" fill="#c94f16"/>
+          <path d="M445,156 L457,148 L445,148 Z" fill="#c94f16"/>
+          <path d="M445,216 L457,224 L445,224 Z" fill="#c94f16"/>
+          <rect x="103" y="148" width="354" height="76" fill="#f26522"/>
+          <line x1="132" y1="183" x2="198" y2="183" stroke="#3d4247" stroke-width="5"/>
+          <line x1="362" y1="183" x2="428" y2="183" stroke="#3d4247" stroke-width="5"/>
+          <text x="280" y="201" text-anchor="middle" font-family="Montserrat, Arial, Helvetica, sans-serif" font-size="56" font-weight="900" letter-spacing="2" fill="#3d4247">C4D</text>
+          <text x="283" y="219" text-anchor="middle" font-family="Montserrat, Arial, Helvetica, sans-serif" font-size="18" font-weight="800" letter-spacing="7" fill="#3d4247">MORTGAGE</text>
+        </svg>
       </div>
       <div class="s1-footer">
         <div class="s1-divider"></div>
@@ -729,7 +756,6 @@
       <div>
         <div class="wx-loc">Troy, Michigan</div>
         <div class="wx-greeting" id="wxGreeting">Hello, Troy</div>
-        <div class="wx-flavor" id="wxFlavor">Pulling up the local scene…</div>
       </div>
 
       <div class="wx-mid">
@@ -753,8 +779,6 @@
       </div>
 
       <div class="wx-forecast" id="wxForecast"></div>
-
-      <div class="wx-quip" id="wxQuip">&nbsp;</div>
     </div>
     <div class="panel s7">
       <!-- CALENDAR (commented out — replaced by Today's Mortgage Rates; restore this block
@@ -1109,38 +1133,6 @@
       return "Late night in the Big Beaver";
     }
 
-    // Little rotating flavor lines (Michigan / Troy / mortgage office vibe).
-    const FLAVOR_LINES = [
-      "Somewhere off Big Beaver Road…",
-      "Closer to the lakes than you think.",
-      "Coney's still open. Probably.",
-      "Go Lions — this is the year. (We mean it.)",
-      "Pure Michigan, one rate lock at a time.",
-      "Rates change. Coffee helps.",
-      "The Somerset crowd is out and about."
-    ];
-
-    // Weather-driven quip — Michigan does NOT do subtle seasons.
-    function quipFor(code, tempF, isDay) {
-      if ([71,73,75,77,85,86].includes(code))
-        return "❄️ Snow day energy — bundle up, Michigan winters don't negotiate.";
-      if ([95,96,99,82].includes(code))
-        return "⛈️ Thunder rolling in — good day to lock a rate indoors.";
-      if ([61,63,65,80,81,51,53,55].includes(code))
-        return "☔ Grab an umbrella — soft Michigan rain incoming.";
-      if ([45,48].includes(code))
-        return "🌫️ Foggy out — drive safe on Rochester Road.";
-      if (tempF != null && tempF >= 88)
-        return "🥵 Scorcher for Michigan — find some AC and a lemonade.";
-      if (tempF != null && tempF <= 20)
-        return "🧊 Frigid — the kind of cold that earns you bragging rights.";
-      if (code === 0 && isDay)
-        return "😎 Gorgeous day — soak up that rare Michigan sunshine.";
-      if (!isDay)
-        return "🌙 Quiet night over Oakland County.";
-      return "👍 Solid day in southeast Michigan.";
-    }
-
     // Short weekday name from an "YYYY-MM-DD" string (built at local noon to avoid TZ drift).
     function shortDayName(iso) {
       const p = iso.split('-').map(Number);
@@ -1163,7 +1155,6 @@
       return { parts, hour24 };
     }
 
-    let flavorIdx = 0;
     function tickClock() {
       const { parts, hour24 } = getTroyParts();
       document.getElementById('wxClock').innerHTML =
@@ -1172,12 +1163,6 @@
       document.getElementById('wxDate').textContent =
         parts.weekday + ", " + parts.month + " " + parts.day + ", " + parts.year;
       document.getElementById('wxGreeting').textContent = greetingFor(hour24);
-    }
-
-    function rotateFlavor() {
-      document.getElementById('wxFlavor').textContent =
-        FLAVOR_LINES[flavorIdx % FLAVOR_LINES.length];
-      flavorIdx++;
     }
 
     async function fetchWeather() {
@@ -1200,8 +1185,6 @@
           "Feels like " + Math.round(c.apparent_temperature) + "° · " +
           c.relative_humidity_2m + "% humidity · " +
           Math.round(c.wind_speed_10m) + " mph wind";
-        document.getElementById('wxQuip').textContent =
-          quipFor(c.weather_code, c.temperature_2m, isDay);
 
         // Next 3 days (indices 1..3; index 0 is today)
         if (data.daily && data.daily.time) {
@@ -1222,7 +1205,6 @@
       } catch (e) {
         document.getElementById('wxCond').textContent = "Weather unavailable right now";
         document.getElementById('wxSub').textContent = "Couldn't reach the weather service.";
-        document.getElementById('wxQuip').textContent = "🌡️ Trust us, it's Michigan out there.";
         twemojify(document.querySelector('.s6'));
       }
     }
@@ -1421,8 +1403,6 @@
 
     tickClock();
     setInterval(tickClock, 1000);        // clock ticks every second
-    rotateFlavor();
-    setInterval(rotateFlavor, 8000);     // flavor line rotates every 8s
     fetchWeather();
     setInterval(fetchWeather, 10 * 60 * 1000); // weather refresh every 10 min
 
