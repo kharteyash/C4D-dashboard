@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
+  <title>C4D Mortgage Dashboard</title>
   <!-- Color emoji font so weather icons render on Linux/Raspberry Pi (no system emoji font) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +21,7 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif, "Noto Color Emoji";
-      background: #07224b;
+      background: #2b2f33;
       padding: 8px;
     }
 
@@ -51,7 +51,7 @@
 
     .panel {
       background: #ffffff;
-      border: 2px solid #07224b;
+      border: 2px solid #2b2f33;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -72,13 +72,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      /* extra bottom padding keeps the logo clear of the footer text */
+      padding: 12px 16px 150px;
     }
     .logo-img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
-      transform: scale(1.5);
     }
     .s1-footer {
       position: absolute;
@@ -97,7 +97,7 @@
       width: 72px;
       height: 3px;
       border-radius: 2px;
-      background: linear-gradient(90deg, #07224b, #547ab2);
+      background: linear-gradient(90deg, #2b2f33, #f79b62);
       margin-bottom: 4px;
     }
     .s1-tagline {
@@ -109,7 +109,7 @@
       font-size: clamp(20px, 2.55vw, 32px);
       font-weight: 700;
       letter-spacing: 0.02em;
-      color: #2b5aa8;
+      color: #f26522;
       text-decoration: none;
     }
     .s1-nmls {
@@ -125,7 +125,7 @@
       user-select: none;
     }
     .logo .top {
-      color: #2b5aa8;
+      color: #f26522;
       font-weight: 700;
       font-size: clamp(20px, 4.5vw, 52px);
       letter-spacing: 0.18em;
@@ -189,7 +189,7 @@
       padding: 10px 14px;
       font-weight: 700;
       font-size: clamp(12px, 1.3vw, 15px);
-      color: #14202b;
+      color: #2b2f33;
       border-bottom: 1px solid #ececec;
       letter-spacing: 0.02em;
       display: flex;
@@ -211,7 +211,7 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.18em;
-      color: #2b5aa8;
+      color: #f26522;
       position: relative;
       padding-bottom: 10px;
     }
@@ -224,7 +224,7 @@
       width: 90px;
       height: 6px;
       border-radius: 3px;
-      background: linear-gradient(90deg, #2b5aa8, #7fa8e0);
+      background: linear-gradient(90deg, #f26522, #8dc63f);
     }
     .tsy-number {
       font-size: clamp(88px, 15vw, 192px);
@@ -232,11 +232,11 @@
       line-height: 1;
       letter-spacing: 0.01em;
       font-variant-numeric: tabular-nums;
-      background: linear-gradient(180deg, #2b5aa8 0%, #14202b 95%);
+      background: linear-gradient(180deg, #f26522 0%, #2b2f33 95%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      text-shadow: 0 1px 1px rgba(43, 90, 168, 0.08);
+      text-shadow: 0 1px 1px rgba(242, 101, 34, 0.08);
     }
     .tsy-updated {
       font-size: clamp(20px, 2.2vw, 26px);
@@ -278,7 +278,7 @@
       display: flex;
       align-items: center;
       padding: 0 40px;
-      background: #c8102e;
+      background: #f26522;
       color: #fff;
       font-weight: 800;
       letter-spacing: 0.12em;
@@ -317,7 +317,7 @@
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      background: #c8102e;
+      background: #8dc63f;
       margin-right: 34px;
       flex: 0 0 auto;
     }
@@ -331,7 +331,7 @@
       overflow: hidden;
       display: flex;
       align-items: stretch;
-      background: #0b1d2c;
+      background: #23272b;
       border: 3px solid #ffffff;
       color: #fff;
     }
@@ -340,7 +340,7 @@
       display: flex;
       align-items: center;
       padding: 0 40px;
-      background: #1a5c3a;
+      background: #6f9c2f;
       color: #fff;
       font-weight: 800;
       letter-spacing: 0.12em;
@@ -388,13 +388,13 @@
       align-items: stretch;
       padding: 48px;
       color: #1a2733;
-      background: linear-gradient(160deg, #eaf2fb 0%, #ffffff 60%);
+      background: linear-gradient(160deg, #fdf0e6 0%, #ffffff 60%);
       text-align: left;
     }
     .wx-greeting {
       font-size: clamp(32px, 3.4vw, 41px);
       font-weight: 600;
-      color: #2b5aa8;
+      color: #f26522;
     }
     .wx-flavor {
       font-size: clamp(27px, 2.67vw, 32px);
@@ -407,7 +407,7 @@
       font-weight: 800;
       line-height: 1;
       letter-spacing: 0.01em;
-      color: #14202b;
+      color: #2b2f33;
       font-variant-numeric: tabular-nums;
     }
     .wx-clock .ampm {
@@ -449,7 +449,7 @@
     .wx-temp {
       font-size: clamp(83px, 14.58vw, 156px);
       font-weight: 800;
-      color: #14202b;
+      color: #2b2f33;
       line-height: 1;
       letter-spacing: 0.01em;
       font-variant-numeric: tabular-nums;
@@ -466,7 +466,7 @@
     .wx-quip {
       font-size: clamp(27px, 2.92vw, 34px);
       font-weight: 600;
-      color: #2b5aa8;
+      color: #f26522;
     }
     .wx-forecast {
       display: flex;
@@ -474,7 +474,7 @@
     }
     .wx-fc-day {
       flex: 1 1 0;
-      background: rgba(43, 90, 168, 0.07);
+      background: rgba(242, 101, 34, 0.07);
       border-radius: 8px;
       padding: 6px 4px;
       text-align: center;
@@ -489,7 +489,7 @@
     .wx-fc-temp {
       font-size: clamp(24px, 2.67vw, 29px);
       font-weight: 700;
-      color: #14202b;
+      color: #2b2f33;
       font-variant-numeric: tabular-nums;
     }
     .wx-fc-temp .lo { color: #8a96a2; font-weight: 500; }
@@ -511,13 +511,13 @@
       font-size: clamp(22px, 2.4vw, 26px);
       font-weight: 700;
       letter-spacing: 0.1em;
-      color: #2b5aa8;
+      color: #f26522;
     }
     .cal-date {
       font-size: clamp(52px, 8vw, 84px);
       font-weight: 400;
       line-height: 1.05;
-      color: #14202b;
+      color: #2b2f33;
     }
     .cal-tz {
       flex: 0 0 auto;
@@ -553,12 +553,12 @@
     .cal-event {
       position: absolute;
       inset: 3px 10px 3px 6px;
-      background: #2b5aa8;
-      border-left: 3px solid #7fa8e0;
+      background: #f26522;
+      border-left: 3px solid #8dc63f;
       border-radius: 6px;
       padding: 4px 10px;
       overflow: hidden;
-      box-shadow: 0 1px 4px rgba(43, 90, 168, 0.25);
+      box-shadow: 0 1px 4px rgba(242, 101, 34, 0.25);
     }
     .cal-event-title {
       font-size: clamp(22px, 2.4vw, 28px);
@@ -568,7 +568,7 @@
     }
     .cal-event-time {
       font-size: clamp(20px, 2vw, 24px);
-      color: #cfe0f5;
+      color: #ffe0cd;
     }
 
     /* ----- Monthly calendar (section 7) ----- */
@@ -580,7 +580,7 @@
     .cal-m-title {
       font-size: clamp(31px, 4.08vw, 51px);
       font-weight: 800;
-      color: #14202b;
+      color: #2b2f33;
       letter-spacing: 0.01em;
     }
     .cal-m-weekdays {
@@ -594,7 +594,7 @@
       font-size: clamp(19px, 2.21vw, 27px);
       font-weight: 700;
       letter-spacing: 0.04em;
-      color: #2b5aa8;
+      color: #f26522;
       padding: 4px 0;
     }
     .cal-m-grid {
@@ -623,10 +623,10 @@
     }
     .cal-m-other .cal-m-num { color: #c4ccd4; }
     .cal-m-today {
-      background: rgba(43, 90, 168, 0.10);
+      background: rgba(242, 101, 34, 0.10);
     }
     .cal-m-today .cal-m-num {
-      color: #2b5aa8;
+      color: #f26522;
       font-weight: 800;
     }
     .cal-m-events {
@@ -645,7 +645,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .cal-m-event.meeting { background: #2b5aa8; color: #ffffff; }
+    .cal-m-event.meeting { background: #f26522; color: #ffffff; }
     .cal-m-event.holiday { background: #f3b21b; color: #3a2a00; }
     .cal-m-event.processing { background: #1a7f37; color: #ffffff; }
     .cal-m-event.sales { background: #6b4fa8; color: #ffffff; }
@@ -657,7 +657,7 @@
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: #2b5aa8;
+      color: #f26522;
       line-height: 1.05;
       position: relative;
       display: inline-block;
@@ -671,7 +671,7 @@
       width: 110px;
       height: 6px;
       border-radius: 3px;
-      background: linear-gradient(90deg, #2b5aa8, #7fa8e0);
+      background: linear-gradient(90deg, #f26522, #8dc63f);
     }
     .rates-sub {
       font-size: clamp(22px, 2.4vw, 30px);
@@ -709,7 +709,7 @@
       font-weight: 800;
       line-height: 1.1;
       font-variant-numeric: tabular-nums;
-      background: linear-gradient(180deg, #2b5aa8 0%, #14202b 95%);
+      background: linear-gradient(180deg, #f26522 0%, #2b2f33 95%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -728,13 +728,13 @@
   <div class="dashboard">
     <div class="panel s1">
       <div class="s1-logo">
-        <img class="logo-img" src="images/download.gif" alt="SafeTrust Mortgage">
+        <img class="logo-img" src="images/c4d-logo.svg" alt="C4D Mortgage">
       </div>
       <div class="s1-footer">
         <div class="s1-divider"></div>
         <div class="s1-tagline">Your trusted path home 🏡</div>
-        <a class="s1-web" href="https://safetrustmtg.com/" target="_blank" rel="noopener">🌐 safetrustmtg.com</a>
-        <div class="s1-nmls">NMLS #2178036</div>
+        <a class="s1-web" href="https://www.c4dmortgage.com/" target="_blank" rel="noopener">🌐 c4dmortgage.com</a>
+        <div class="s1-nmls">NMLS #151261</div>
       </div>
     </div>
     <div class="panel s2" id="slideshow">
@@ -875,17 +875,17 @@
         rightPriceScale: { borderColor: '#e6e6e6' },
         timeScale: { borderColor: '#e6e6e6', fixLeftEdge: true, fixRightEdge: true },
         grid: {
-          vertLines: { color: 'rgba(43,90,168,0.05)' },
-          horzLines: { color: 'rgba(43,90,168,0.06)' }
+          vertLines: { color: 'rgba(242,101,34,0.05)' },
+          horzLines: { color: 'rgba(242,101,34,0.06)' }
         },
         crosshair: { mode: 0 },
         handleScroll: false,
         handleScale: false
       });
       const series = chart.addAreaSeries({
-        lineColor: '#2b5aa8',
-        topColor: 'rgba(43,90,168,0.25)',
-        bottomColor: 'rgba(43,90,168,0.02)',
+        lineColor: '#f26522',
+        topColor: 'rgba(242,101,34,0.25)',
+        bottomColor: 'rgba(242,101,34,0.02)',
         lineWidth: 2,
         priceFormat: { type: 'custom', formatter: v => v.toFixed(2) + '%' }
       });
@@ -909,9 +909,9 @@
     initTreasuryChart();
 
     // ----- Image slideshow (section 2) -----
-    // Cycles flyer pages from the "Safetrust Company Member Book Flyer" folder,
+    // Cycles flyer pages from the "C4D Company Member Book Flyer" folder,
     // named 1.png .. 38.png, in numeric order, looping back to 1.
-    const SLIDE_BASE = "Safetrust Company Member Book Flyer/";
+    const SLIDE_BASE = "C4D Company Member Book Flyer/";
     const SLIDE_MAX = 38;                 // highest number to look for (1..38)
     const SLIDE_EXTS = ["png", "jpg", "jpeg", "webp", "gif"];
     const SLIDE_INTERVAL = 5000;          // ms each image stays on screen
@@ -1445,7 +1445,7 @@
       const today = parseInt(new Intl.DateTimeFormat("en-US", { timeZone: CAL_TZ, day: "numeric" }).format(now), 10);
 
       document.getElementById('calMTitle').textContent =
-        "Safetrust Events - " +
+        "C4D Events - " +
         new Date(year, month, 1).toLocaleDateString("en-US", { month: "long", year: "numeric" });
 
       const holidays = holidaysForMonth(year, month);

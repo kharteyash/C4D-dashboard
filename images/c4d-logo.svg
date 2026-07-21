@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 340" role="img" aria-label="C4D Mortgage logo">
+  <defs>
+    <clipPath id="roofClip">
+      <polygon points="180,172 280,66 380,172"/>
+    </clipPath>
+    <clipPath id="baseClip">
+      <polygon points="176,224 384,224 280,282"/>
+    </clipPath>
+  </defs>
+
+  <!-- Green bushes peeking from behind the badge -->
+  <g fill="#8dc63f">
+    <circle cx="150" cy="80" r="26"/>
+    <circle cx="126" cy="96" r="18"/>
+    <circle cx="172" cy="66" r="18"/>
+    <circle cx="186" cy="90" r="14"/>
+    <circle cx="410" cy="80" r="26"/>
+    <circle cx="434" cy="96" r="18"/>
+    <circle cx="388" cy="66" r="18"/>
+    <circle cx="374" cy="90" r="14"/>
+  </g>
+
+  <!-- Hexagon badge: charcoal edge, white gap, orange face -->
+  <polygon points="280,25 410,95 410,235 280,305 150,235 150,95" fill="#3d4247"/>
+  <polygon points="280,38 398,102 398,228 280,292 162,228 162,102" fill="#ffffff"/>
+  <polygon points="280,48 388,108 388,222 280,282 172,222 172,108" fill="#f26522"/>
+
+  <!-- Roof with road swoosh and windows -->
+  <polygon points="180,172 280,66 380,172" fill="#3d4247" stroke="#ffffff" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M196,176 C240,128 305,102 372,122" fill="none" stroke="#f26522" stroke-width="11" clip-path="url(#roofClip)"/>
+  <g fill="#ffffff">
+    <rect x="252" y="102" width="9" height="11"/>
+    <rect x="264" y="102" width="9" height="11"/>
+    <rect x="252" y="116" width="9" height="11"/>
+    <rect x="264" y="116" width="9" height="11"/>
+    <rect x="287" y="102" width="9" height="11"/>
+    <rect x="299" y="102" width="9" height="11"/>
+    <rect x="287" y="116" width="9" height="11"/>
+    <rect x="299" y="116" width="9" height="11"/>
+  </g>
+
+  <!-- Charcoal base with orange swoosh -->
+  <polygon points="176,224 384,224 280,282" fill="#3d4247"/>
+  <path d="M220,246 Q280,226 352,236 Q288,240 232,256 Z" fill="#f26522" clip-path="url(#baseClip)"/>
+
+  <!-- Ribbon banner -->
+  <path d="M30,156 L115,156 L115,216 L30,216 L58,186 Z" fill="#f26522"/>
+  <path d="M530,156 L445,156 L445,216 L530,216 L502,186 Z" fill="#f26522"/>
+  <path d="M115,156 L103,148 L115,148 Z" fill="#c94f16"/>
+  <path d="M115,216 L103,224 L115,224 Z" fill="#c94f16"/>
+  <path d="M445,156 L457,148 L445,148 Z" fill="#c94f16"/>
+  <path d="M445,216 L457,224 L445,224 Z" fill="#c94f16"/>
+  <rect x="103" y="148" width="354" height="76" fill="#f26522"/>
+
+  <!-- Wordmark -->
+  <line x1="132" y1="183" x2="198" y2="183" stroke="#3d4247" stroke-width="5"/>
+  <line x1="362" y1="183" x2="428" y2="183" stroke="#3d4247" stroke-width="5"/>
+  <text x="280" y="201" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="56" font-weight="900" letter-spacing="2" fill="#3d4247">C4D</text>
+  <text x="283" y="219" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="7" fill="#3d4247">MORTGAGE</text>
+</svg>
