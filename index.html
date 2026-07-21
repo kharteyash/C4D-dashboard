@@ -43,8 +43,8 @@
       /* rows: top area, bottom area, then two thin bars */
       grid-template-rows: 1fr 1.6fr 120px 120px;
       grid-template-areas:
-        "s1 s2 s6"
-        "s3 s2 s7"
+        "s3 s1 s6"
+        "s3 s1 s7"
         "s4 s4 s4"
         "s5 s5 s5";
     }
@@ -73,7 +73,7 @@
       align-items: center;
       justify-content: center;
       /* extra bottom padding keeps the logo clear of the footer text */
-      padding: 12px 16px 150px;
+      padding: 32px 40px 260px;
     }
     .logo-img {
       max-width: 100%;
@@ -89,31 +89,31 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-      padding: 18px 10px 10px;
+      gap: 12px;
+      padding: 24px 16px 36px;
       background: transparent;
     }
     .s1-divider {
-      width: 72px;
-      height: 3px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, #2b2f33, #f79b62);
-      margin-bottom: 4px;
+      width: 140px;
+      height: 5px;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #f26522, #8dc63f);
+      margin-bottom: 8px;
     }
     .s1-tagline {
-      font-size: clamp(17px, 2.1vw, 24px);
+      font-size: clamp(28px, 2.9vw, 44px);
       font-style: italic;
       color: #6b7785;
     }
     .s1-web {
-      font-size: clamp(20px, 2.55vw, 32px);
+      font-size: clamp(36px, 3.6vw, 60px);
       font-weight: 700;
       letter-spacing: 0.02em;
       color: #f26522;
       text-decoration: none;
     }
     .s1-nmls {
-      font-size: clamp(17px, 1.95vw, 23px);
+      font-size: clamp(28px, 2.7vw, 42px);
       font-weight: 600;
       letter-spacing: 0.08em;
       color: #8a96a2;
@@ -137,44 +137,6 @@
       letter-spacing: 0.35em;
       margin-top: 4px;
       padding-left: 0.35em; /* offset to balance the trailing letter-spacing */
-    }
-    .s2 {
-      grid-area: s2;
-      padding: 0;
-      overflow: hidden;
-      position: relative;
-      background: #ffffff;
-    }
-    .slide {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;        /* show whole flyer page, no cropping of text */
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-    .slide.active { opacity: 1; }
-    .slide-empty {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      color: #9aa6b2;
-      text-align: center;
-      padding: 24px;
-      font-size: 15px;
-      line-height: 1.5;
-    }
-    .slide-empty code {
-      background: #1c1c1c;
-      color: #cfd8e0;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 14px;
     }
     .s3 {
       grid-area: s3;
@@ -733,13 +695,8 @@
       <div class="s1-footer">
         <div class="s1-divider"></div>
         <div class="s1-tagline">Your trusted path home 🏡</div>
-        <a class="s1-web" href="https://www.c4dmortgage.com/" target="_blank" rel="noopener">🌐 c4dmortgage.com</a>
+        <a class="s1-web" href="https://www.c4dmortgage.com/" target="_blank" rel="noopener">c4dmortgage.com</a>
         <div class="s1-nmls">NMLS #151261</div>
-      </div>
-    </div>
-    <div class="panel s2" id="slideshow">
-      <div class="slide-empty" id="slideEmpty">
-        <div>🖼️ Loading flyer pages…</div>
       </div>
     </div>
     <div class="panel s3">
@@ -907,64 +864,6 @@
       setInterval(load, 5 * 60 * 1000);   // refresh the chart every 5 minutes
     }
     initTreasuryChart();
-
-    // ----- Image slideshow (section 2) -----
-    // Cycles flyer pages from the "C4D Company Member Book Flyer" folder,
-    // named 1.png .. 38.png, in numeric order, looping back to 1.
-    const SLIDE_BASE = "C4D Company Member Book Flyer/";
-    const SLIDE_MAX = 38;                 // highest number to look for (1..38)
-    const SLIDE_EXTS = ["png", "jpg", "jpeg", "webp", "gif"];
-    const SLIDE_INTERVAL = 5000;          // ms each image stays on screen
-
-    // Try to load <base><n>.<ext>, resolving to the first extension that loads.
-    function probeImage(n) {
-      return new Promise(resolve => {
-        let i = 0;
-        const tryNext = () => {
-          if (i >= SLIDE_EXTS.length) { resolve(null); return; }
-          const src = encodeURI(SLIDE_BASE + n + "." + SLIDE_EXTS[i++]);
-          const img = new Image();
-          img.onload = () => resolve(src);
-          img.onerror = tryNext;
-          img.src = src;
-        };
-        tryNext();
-      });
-    }
-
-    async function initSlideshow() {
-      const container = document.getElementById('slideshow');
-      const empty = document.getElementById('slideEmpty');
-
-      // Probe 1..SLIDE_MAX in parallel, keep the ones that exist, in order.
-      const found = (await Promise.all(
-        Array.from({ length: SLIDE_MAX }, (_, k) => probeImage(k + 1))
-      )).filter(Boolean);
-
-      if (!found.length) return; // leave the "no images" message visible
-
-      empty.remove();
-
-      const slides = found.map((src, idx) => {
-        const img = document.createElement('img');
-        img.className = 'slide' + (idx === 0 ? ' active' : '');
-        img.src = src;
-        img.alt = '';
-        container.appendChild(img);
-        return img;
-      });
-
-      if (slides.length === 1) return; // single image: just show it, no cycling
-
-      let current = 0;
-      setInterval(() => {
-        slides[current].classList.remove('active');
-        current = (current + 1) % slides.length;
-        slides[current].classList.add('active');
-      }, SLIDE_INTERVAL);
-    }
-
-    initSlideshow();
 
     // ----- News ticker -----
     // Real headlines pulled June 23, 2026 (used as the offline fallback).
