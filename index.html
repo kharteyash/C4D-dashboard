@@ -36,12 +36,13 @@
       display: inline-block;
     }
 
-    /* Fixed 1920x1080 design canvas, scaled to the real screen by JS.
-       This renders identically on every browser/resolution (TV, Pi, laptop). */
+    /* Fixed 3840x2160 design canvas, scaled to the real screen by JS.
+       Sizes below are the original SafeTrust dashboard values as they
+       rendered on a 4K TV, so this reproduces that look everywhere. */
     .dashboard {
       display: grid;
-      width: 1920px;
-      height: 1080px;
+      width: 3840px;
+      height: 2160px;
       padding: 8px;
       transform-origin: top left;
       gap: 8px;
@@ -80,7 +81,7 @@
       align-items: center;
       justify-content: center;
       /* extra bottom padding keeps the logo clear of the footer text */
-      padding: 32px 38px 280px;
+      padding: 48px 48px 360px;
     }
     .logo-img {
       width: 100%;
@@ -95,31 +96,31 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
-      padding: 22px 19px 37px;
+      gap: 4px;
+      padding: 18px 10px 24px;
       background: transparent;
     }
     .s1-divider {
-      width: 160px;
-      height: 5px;
-      border-radius: 3px;
+      width: 72px;
+      height: 3px;
+      border-radius: 2px;
       background: linear-gradient(90deg, #f26522, #8dc63f);
-      margin-bottom: 9px;
+      margin-bottom: 4px;
     }
     .s1-tagline {
-      font-size: 37px;
+      font-size: 24px;
       font-style: italic;
       color: #6b7785;
     }
     .s1-web {
-      font-size: 54px;
+      font-size: 32px;
       font-weight: 700;
       letter-spacing: 0.02em;
       color: #f26522;
       text-decoration: none;
     }
     .s1-nmls {
-      font-size: 39px;
+      font-size: 23px;
       font-weight: 600;
       letter-spacing: 0.08em;
       color: #8a96a2;
@@ -149,14 +150,14 @@
       flex-direction: column;
       align-items: stretch;
       justify-content: flex-start;
-      padding: 32px 29px;
+      padding: 48px;
       overflow: hidden;
     }
     .tsy-header {
       flex: 0 0 auto;
       padding: 10px 14px;
       font-weight: 700;
-      font-size: 19px;
+      font-size: 15px;
       color: #2b2f33;
       border-bottom: 1px solid #ececec;
       letter-spacing: 0.02em;
@@ -165,7 +166,7 @@
       justify-content: space-between;
     }
     .tsy-top {
-      flex: 0 0 45%;
+      flex: 0 0 40%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -175,7 +176,7 @@
       text-align: center;
     }
     .tsy-title {
-      font-size: 59px;
+      font-size: 60px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.18em;
@@ -195,7 +196,7 @@
       background: linear-gradient(90deg, #f26522, #8dc63f);
     }
     .tsy-number {
-      font-size: 238px;
+      font-size: 192px;
       font-weight: 800;
       line-height: 1;
       letter-spacing: 0.01em;
@@ -218,7 +219,7 @@
       min-height: 0;
     }
     .tsy-src {
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 800;
       letter-spacing: 0.08em;
       color: #6b7785;
@@ -354,19 +355,19 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: stretch;
-      padding: 22px 27px;
+      padding: 48px;
       color: #1a2733;
       background: linear-gradient(160deg, #fdf0e6 0%, #ffffff 60%);
       text-align: left;
       overflow: hidden;
     }
     .wx-greeting {
-      font-size: 29px;
+      font-size: 41px;
       font-weight: 600;
       color: #f26522;
     }
     .wx-clock {
-      font-size: 71px;
+      font-size: 156px;
       font-weight: 800;
       line-height: 1;
       letter-spacing: 0.01em;
@@ -380,7 +381,7 @@
       margin-left: 6px;
     }
     .wx-date {
-      font-size: 19px;
+      font-size: 44px;
       font-weight: 600;
       color: #3a4754;
       margin-top: 2px;
@@ -390,7 +391,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 15px;
+      gap: 28px;
     }
     /* let the weather text wrap instead of overflowing the panel */
     .wx-mid > *, .wx-weather, .wx-weather > div { min-width: 0; }
@@ -407,24 +408,24 @@
       align-items: center;
       gap: 14px;
     }
-    .wx-icon { font-size: 56px; line-height: 1; }
+    .wx-icon { font-size: 126px; line-height: 1; }
     .wx-temp-row {
       display: flex;
       align-items: center;
       gap: 14px;
     }
     .wx-temp {
-      font-size: 71px;
+      font-size: 156px;
       font-weight: 800;
       color: #2b2f33;
       line-height: 1;
       letter-spacing: 0.01em;
       font-variant-numeric: tabular-nums;
     }
-    .wx-cond { font-size: 25px; font-weight: 600; color: #3a4754; }
-    .wx-sub  { font-size: 18px; color: #6b7785; margin-top: 2px; }
+    .wx-cond { font-size: 37px; font-weight: 600; color: #3a4754; }
+    .wx-sub  { font-size: 29px; color: #6b7785; margin-top: 2px; }
     .wx-loc {
-      font-size: 18px;
+      font-size: 29px;
       font-weight: 700;
       letter-spacing: 0.02em;
       text-transform: uppercase;
@@ -438,18 +439,18 @@
       flex: 1 1 0;
       background: rgba(242, 101, 34, 0.07);
       border-radius: 8px;
-      padding: 4px;
+      padding: 6px 4px;
       text-align: center;
-      line-height: 1.15;
+      line-height: 1.25;
     }
     .wx-fc-name {
-      font-size: 19px;
+      font-size: 29px;
       font-weight: 700;
       color: #3a4754;
     }
-    .wx-fc-icon { font-size: 30px; }
+    .wx-fc-icon { font-size: 59px; }
     .wx-fc-temp {
-      font-size: 19px;
+      font-size: 29px;
       font-weight: 700;
       color: #2b2f33;
       font-variant-numeric: tabular-nums;
@@ -460,7 +461,7 @@
       flex-direction: column;
       align-items: stretch;
       justify-content: flex-start;
-      padding: 27px 29px;
+      padding: 48px;
       overflow: hidden;
       background: #ffffff;
       color: #1a2733;
@@ -615,7 +616,7 @@
     /* ----- Today's Mortgage Rates (section 7) ----- */
     .rates-header { flex: 0 0 auto; margin-bottom: 16px; }
     .rates-title {
-      font-size: 70px;
+      font-size: 72px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.04em;
@@ -636,7 +637,7 @@
       background: linear-gradient(90deg, #f26522, #8dc63f);
     }
     .rates-sub {
-      font-size: 28px;
+      font-size: 30px;
       color: #8a96a2;
       margin-top: 8px;
     }
@@ -655,7 +656,7 @@
       padding-top: 6px;
     }
     .rate-name {
-      font-size: 39px;
+      font-size: 42px;
       font-weight: 700;
       color: #6b7785;
       letter-spacing: 0.01em;
@@ -667,7 +668,7 @@
       flex-wrap: wrap;
     }
     .rate-value {
-      font-size: 89px;
+      font-size: 100px;
       font-weight: 800;
       line-height: 1.1;
       font-variant-numeric: tabular-nums;
@@ -677,7 +678,7 @@
       color: transparent;
     }
     .rate-chg {
-      font-size: 41px;
+      font-size: 44px;
       font-weight: 700;
       font-variant-numeric: tabular-nums;
     }
@@ -814,7 +815,7 @@
     function fitDashboard() {
       const el = document.querySelector('.dashboard');
       if (!el) return;
-      el.style.transform = 'scale(' + (window.innerWidth / 1920) + ', ' + (window.innerHeight / 1080) + ')';
+      el.style.transform = 'scale(' + (window.innerWidth / 3840) + ', ' + (window.innerHeight / 2160) + ')';
     }
     fitDashboard();
     window.addEventListener('resize', fitDashboard);
