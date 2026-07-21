@@ -22,7 +22,9 @@
     body {
       font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif, "Noto Color Emoji";
       background: #2b2f33;
-      padding: 8px;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
     }
 
     /* Twemoji emoji images scale with the surrounding font-size */
@@ -34,14 +36,19 @@
       display: inline-block;
     }
 
+    /* Fixed 1920x1080 design canvas, scaled to the real screen by JS.
+       This renders identically on every browser/resolution (TV, Pi, laptop). */
     .dashboard {
       display: grid;
-      height: calc(100vh - 16px);
+      width: 1920px;
+      height: 1080px;
+      padding: 8px;
+      transform-origin: top left;
       gap: 8px;
       /* three columns: left, middle (wider), right */
       grid-template-columns: 1fr 1.45fr 1fr;
-      /* rows: top area, bottom area, then two thin bars (vh so they scale on 4K TVs) */
-      grid-template-rows: 1fr 1.6fr 2.75vh 2.75vh;
+      /* rows: top area, bottom area, then two thin bars */
+      grid-template-rows: 1fr 1.6fr 30px 30px;
       grid-template-areas:
         "s3 s1 s6"
         "s3 s1 s7"
@@ -73,7 +80,7 @@
       align-items: center;
       justify-content: center;
       /* extra bottom padding keeps the logo clear of the footer text */
-      padding: 1.5vh 0.5vw 24vh;
+      padding: 16px 10px 260px;
     }
     .logo-img {
       width: 100%;
@@ -88,31 +95,31 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1.1vh;
-      padding: 2vh 1vw 3.4vh;
+      gap: 12px;
+      padding: 22px 19px 37px;
       background: transparent;
     }
     .s1-divider {
-      width: clamp(140px, 9vw, 320px);
-      height: 0.5vh;
+      width: 160px;
+      height: 5px;
       border-radius: 3px;
       background: linear-gradient(90deg, #f26522, #8dc63f);
-      margin-bottom: 0.8vh;
+      margin-bottom: 9px;
     }
     .s1-tagline {
-      font-size: clamp(20px, 3.4vh, 84px);
+      font-size: 37px;
       font-style: italic;
       color: #6b7785;
     }
     .s1-web {
-      font-size: clamp(28px, 5vh, 124px);
+      font-size: 54px;
       font-weight: 700;
       letter-spacing: 0.02em;
       color: #f26522;
       text-decoration: none;
     }
     .s1-nmls {
-      font-size: clamp(20px, 3.6vh, 88px);
+      font-size: 39px;
       font-weight: 600;
       letter-spacing: 0.08em;
       color: #8a96a2;
@@ -142,14 +149,14 @@
       flex-direction: column;
       align-items: stretch;
       justify-content: flex-start;
-      padding: 3vh 1.5vw;
+      padding: 32px 29px;
       overflow: hidden;
     }
     .tsy-header {
       flex: 0 0 auto;
       padding: 10px 14px;
       font-weight: 700;
-      font-size: clamp(12px, 1.8vh, 42px);
+      font-size: 19px;
       color: #2b2f33;
       border-bottom: 1px solid #ececec;
       letter-spacing: 0.02em;
@@ -168,7 +175,7 @@
       text-align: center;
     }
     .tsy-title {
-      font-size: clamp(32px, 5.5vh, 135px);
+      font-size: 59px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.18em;
@@ -188,7 +195,7 @@
       background: linear-gradient(90deg, #f26522, #8dc63f);
     }
     .tsy-number {
-      font-size: clamp(72px, 19vh, 470px);
+      font-size: 205px;
       font-weight: 800;
       line-height: 1;
       letter-spacing: 0.01em;
@@ -200,7 +207,7 @@
       text-shadow: 0 1px 1px rgba(242, 101, 34, 0.08);
     }
     .tsy-updated {
-      font-size: clamp(16px, 2.4vh, 54px);
+      font-size: 26px;
       color: #8a96a2;
       font-style: italic;
     }
@@ -211,7 +218,7 @@
       min-height: 0;
     }
     .tsy-src {
-      font-size: clamp(10px, 0.6vw, 22px);
+      font-size: 12px;
       font-weight: 800;
       letter-spacing: 0.08em;
       color: #6b7785;
@@ -238,12 +245,12 @@
       flex: 0 0 auto;
       display: flex;
       align-items: center;
-      padding: 0 1.2vw;
+      padding: 0 23px;
       background: #f26522;
       color: #fff;
       font-weight: 800;
       letter-spacing: 0.12em;
-      font-size: clamp(13px, 1.9vh, 46px);
+      font-size: 20px;
       text-transform: uppercase;
       z-index: 2;
     }
@@ -269,17 +276,17 @@
     .ticker-item {
       display: inline-flex;
       align-items: center;
-      padding: 0 2vw;
-      font-size: clamp(13px, 1.9vh, 46px);
+      padding: 0 38px;
+      font-size: 20px;
       color: #f0f0f0;
     }
     .ticker-item::before {
       content: "";
-      width: 0.9vh;
-      height: 0.9vh;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       background: #8dc63f;
-      margin-right: 1vw;
+      margin-right: 19px;
       flex: 0 0 auto;
     }
     @keyframes ticker-scroll {
@@ -300,12 +307,12 @@
       flex: 0 0 auto;
       display: flex;
       align-items: center;
-      padding: 0 1.2vw;
+      padding: 0 23px;
       background: #6f9c2f;
       color: #fff;
       font-weight: 800;
       letter-spacing: 0.12em;
-      font-size: clamp(13px, 1.9vh, 46px);
+      font-size: 20px;
       text-transform: uppercase;
       z-index: 2;
     }
@@ -331,9 +338,9 @@
     .stock-item {
       display: inline-flex;
       align-items: baseline;
-      gap: 0.8vw;
-      padding: 0 2vw;
-      font-size: clamp(13px, 1.9vh, 46px);
+      gap: 15px;
+      padding: 0 38px;
+      font-size: 20px;
       border-right: 1px solid rgba(255,255,255,0.12);
     }
     .stock-sym { font-weight: 700; color: #e8eef3; letter-spacing: 0.04em; }
@@ -347,19 +354,19 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: stretch;
-      padding: 2vh 1.4vw;
+      padding: 22px 27px;
       color: #1a2733;
       background: linear-gradient(160deg, #fdf0e6 0%, #ffffff 60%);
       text-align: left;
       overflow: hidden;
     }
     .wx-greeting {
-      font-size: clamp(22px, 2.7vh, 66px);
+      font-size: 29px;
       font-weight: 600;
       color: #f26522;
     }
     .wx-clock {
-      font-size: clamp(48px, 6.6vh, 170px);
+      font-size: 71px;
       font-weight: 800;
       line-height: 1;
       letter-spacing: 0.01em;
@@ -373,7 +380,7 @@
       margin-left: 6px;
     }
     .wx-date {
-      font-size: clamp(13px, 1.8vh, 46px);
+      font-size: 19px;
       font-weight: 600;
       color: #3a4754;
       margin-top: 2px;
@@ -383,7 +390,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.8vw;
+      gap: 15px;
     }
     /* let the weather text wrap instead of overflowing the panel */
     .wx-mid > *, .wx-weather, .wx-weather > div { min-width: 0; }
@@ -400,24 +407,24 @@
       align-items: center;
       gap: 14px;
     }
-    .wx-icon { font-size: clamp(40px, 5.2vh, 130px); line-height: 1; }
+    .wx-icon { font-size: 56px; line-height: 1; }
     .wx-temp-row {
       display: flex;
       align-items: center;
       gap: 14px;
     }
     .wx-temp {
-      font-size: clamp(48px, 6.6vh, 170px);
+      font-size: 71px;
       font-weight: 800;
       color: #2b2f33;
       line-height: 1;
       letter-spacing: 0.01em;
       font-variant-numeric: tabular-nums;
     }
-    .wx-cond { font-size: clamp(16px, 2.3vh, 56px); font-weight: 600; color: #3a4754; }
-    .wx-sub  { font-size: clamp(12px, 1.7vh, 42px); color: #6b7785; margin-top: 2px; }
+    .wx-cond { font-size: 25px; font-weight: 600; color: #3a4754; }
+    .wx-sub  { font-size: 18px; color: #6b7785; margin-top: 2px; }
     .wx-loc {
-      font-size: clamp(12px, 1.7vh, 42px);
+      font-size: 18px;
       font-weight: 700;
       letter-spacing: 0.02em;
       text-transform: uppercase;
@@ -431,18 +438,18 @@
       flex: 1 1 0;
       background: rgba(242, 101, 34, 0.07);
       border-radius: 8px;
-      padding: 0.4vh 4px;
+      padding: 4px;
       text-align: center;
       line-height: 1.15;
     }
     .wx-fc-name {
-      font-size: clamp(12px, 1.8vh, 44px);
+      font-size: 19px;
       font-weight: 700;
       color: #3a4754;
     }
-    .wx-fc-icon { font-size: clamp(22px, 2.8vh, 68px); }
+    .wx-fc-icon { font-size: 30px; }
     .wx-fc-temp {
-      font-size: clamp(12px, 1.8vh, 44px);
+      font-size: 19px;
       font-weight: 700;
       color: #2b2f33;
       font-variant-numeric: tabular-nums;
@@ -453,7 +460,7 @@
       flex-direction: column;
       align-items: stretch;
       justify-content: flex-start;
-      padding: 2.5vh 1.5vw;
+      padding: 27px 29px;
       overflow: hidden;
       background: #ffffff;
       color: #1a2733;
@@ -608,7 +615,7 @@
     /* ----- Today's Mortgage Rates (section 7) ----- */
     .rates-header { flex: 0 0 auto; margin-bottom: 16px; }
     .rates-title {
-      font-size: clamp(36px, 6.5vh, 160px);
+      font-size: 70px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.04em;
@@ -629,7 +636,7 @@
       background: linear-gradient(90deg, #f26522, #8dc63f);
     }
     .rates-sub {
-      font-size: clamp(16px, 2.6vh, 62px);
+      font-size: 28px;
       color: #8a96a2;
       margin-top: 8px;
     }
@@ -648,7 +655,7 @@
       padding-top: 6px;
     }
     .rate-name {
-      font-size: clamp(20px, 3.6vh, 88px);
+      font-size: 39px;
       font-weight: 700;
       color: #6b7785;
       letter-spacing: 0.01em;
@@ -660,7 +667,7 @@
       flex-wrap: wrap;
     }
     .rate-value {
-      font-size: clamp(40px, 8.2vh, 200px);
+      font-size: 89px;
       font-weight: 800;
       line-height: 1.1;
       font-variant-numeric: tabular-nums;
@@ -670,7 +677,7 @@
       color: transparent;
     }
     .rate-chg {
-      font-size: clamp(20px, 3.8vh, 92px);
+      font-size: 41px;
       font-weight: 700;
       font-variant-numeric: tabular-nums;
     }
@@ -803,6 +810,15 @@
   <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
 
   <script>
+    // ----- Scale the fixed 1920x1080 canvas to fill the actual screen -----
+    function fitDashboard() {
+      const el = document.querySelector('.dashboard');
+      if (!el) return;
+      el.style.transform = 'scale(' + (window.innerWidth / 1920) + ', ' + (window.innerHeight / 1080) + ')';
+    }
+    fitDashboard();
+    window.addEventListener('resize', fitDashboard);
+
     // ----- Emoji as images (consistent on Raspberry Pi) -----
     function twemojify(el) {
       if (window.twemoji && el) {
